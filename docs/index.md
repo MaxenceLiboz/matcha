@@ -1,44 +1,54 @@
 # Mandatory part
 
+## Reflexion on bonuses
+- Be able to delete the account.
+- In the advanced search give a distance and not a specific location
+- Show a map to get the location
+- Make the user who likes you at the top of the search
+- Unlike a user so it doesn´t show up on your feed
+- Having a matching experience without pictures ?
+- Being able to get the list of blocked user ?
+- Do something about the report (not just a report button)
+
 ## User registration  
 
-We need theses informations to register:
-- email
-- username
-- last name 
-- first name
-- password
+We need theses informations to register:  
+- email  
+- username  
+- last name   
+- first name  
+- password  
 
-Email with unique link in order to validate their account
+Email with unique link in order to validate their account  
 Email with unique link in order to reset their password
 
-Logout in one click
+Logout should be done in one click
 
 ## User profile
 
-The user profile must fill out theses informations:
-- Age
-- The gender
-- Sexual preference: Hétéro/Homo/Other(other will be concider as Bi)
-- A biography
-- List of interest represented by tags (User must be able to add new ones and re-use other user's one)
-- Up to 5 pictures, include one profile picture.
+The user profile must fill out theses informations:  
+- Age  
+- The gender  
+- Sexual preference: Hétéro/Homo/Other(other will be concider as Bi)  
+- A biography  
+- List of interest represented by tags (User must be able to add new ones and re-use other user's one)  
+- Up to 5 pictures, include one profile picture.  
 
 
-The user must be able to modify:
-- Pictures
-- Last name
-- First name
-- Email
+The user must be able to modify:  
+- Pictures  
+- Last name  
+- First name  
+- Email  
+- His location
 
-The user must be able to: 
-- check who has viewed their profile,
+The user must be able to:   
+- check who has viewed their profile.  
 - check who has “liked” them.  
 
 The user must have a public “fame rating”
 
-The user must be located using GPS positioning up to their neighborhood. We must ask the user if he accept to be positioned, if not we must find a way to do it anyway.
-The user must be able to change its location on his profile 
+The user must be located using GPS positioning up to their neighborhood. If the user doesn´t want to give it we must find a way to do it anyway.
 
 ## APIs
 

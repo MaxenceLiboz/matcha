@@ -45,6 +45,11 @@ A User_like table to have a many to many relationships between users like holdin
 - id: userId
 - id: likedUserId
 
+## User_dislike table
+A User_dislike table to have a many to many relationships between users dislike holding:
+- id: userId
+- id: dislikedUserId
+
 ## User_viewed table
 A User_viewed table to have a many to many relationships between users views holding:
 - id: userId

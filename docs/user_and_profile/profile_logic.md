@@ -12,11 +12,30 @@ The information needed are:
 - A biography
 - List of interest represented by tags (User must be able to add new ones and re-use other user's one)
 - Up to 5 pictures, include one profile picture.
+- Localisation (optionnal)
 
 We need to create a new profile with the given values.  
+If the location isn´t given we should find a way to find it.  
 In the user table add the profile id.  
 For each pictures we need to download it on the server and save its informations in the DB (reference, mymetype)
 
+Throw an error if it doesn´t work.
+
+## Modify a profile
+**Need to be authenticate**
+### Logic
+The goal here is to be able to modify a profile
+
+The information needed are:  
+- Pictures  
+- Last name  
+- First name  
+- Email  
+- His location
+
+Update the above value of the authenticate user.
+
+Return the new updated profile (same logic as [Fetch  a profile](#fetch-a-profile))  
 Throw an error if it doesn´t work.
 
 
