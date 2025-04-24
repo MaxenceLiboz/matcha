@@ -5,11 +5,7 @@ We will use the email verification with a unique token for 2 different operation
 The first one will be activate a user account, and the second one will be to reset the password.
 
 ### The table
-A verification table holding:
-- String: unique token
-- Date: expiration date
-- String/Enum: type
-- id: userId (One to One)
+[verification table](../database.md#verification-table)  
 
 We create a unique link with a new token freshly created in the verification table.  
 Depending on the url the front will do different action.  
