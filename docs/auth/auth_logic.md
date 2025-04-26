@@ -9,6 +9,7 @@ The information needed are : **email, username, first name, last name and passwo
 
 Create the user if not already known (username and email must be unique).  
 Hash the password given before saving it into the DB.  
+Password must have validation check for example lower + upper + number + special.   
 We then send an **email** with a unique link for the user to activate his account.  
 The link must have a unique token using the [verification table](./email_verification.md) logic.  
 Create [Json Web Token](https://dvmhn07.medium.com/jwt-authentication-in-node-js-a-practical-guide-c8ab1b432a49)

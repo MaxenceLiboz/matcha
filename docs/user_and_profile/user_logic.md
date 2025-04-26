@@ -7,6 +7,7 @@ The goal here is to like a user
 
 The information needed is: **the liked user id**
 
+A user that doesn't have a profile picture can't like another user.  
 Add the link between the user liked and the user authenticate in the [user_like table](../database.md#user_like-table)
 
 Throw an error if it doesn´t work.
@@ -29,6 +30,7 @@ The goal here is to dislike a user
 
 The information needed is: **the disliked user id**
 
+A user that doesn't have a profile picture can't dislike another user.  
 Add the link between the user disliked and the user authenticate in the [user_dislike table](../database.md#user_dislike-table)
 
 Throw an error if it doesn´t work.

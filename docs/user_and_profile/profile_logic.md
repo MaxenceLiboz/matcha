@@ -48,5 +48,39 @@ The information needed is: **the user id**
 
 Look into the DB for the specific user, get all his informations except email and password.
 
-Return a list of all the information of the user and its profile, only the reference of the pictures will be sent ([Picutre logic](../picture/picture_logic.md)).  
+Return a list of all the information of the user and its profile (must have the fame rating if it's a match, otherwise the date and time of the last connection), only the reference of the pictures will be sent ([Picutre logic](../picture/picture_logic.md)).  
+Throw an error if it doesn´t work.
+
+
+## Profile suggestion
+**Need to be authenticate**
+### Logic
+The goal here is for the user to easily access a suggestion list that is concitent with his sexuality to match other profile
+
+The criteria for the suggestion list must be:  
+- Same geographic area as the user.  
+- With a maximum of common tags.  
+- With a maximum fame rating.  
+
+
+Blocked user doesn't appear in the suggestion.  
+We need to retrieve a list of profile that match the three different criteria.  
+
+Throw an error if it doesn´t work.
+
+
+## Profile research
+**Need to be authenticate**
+### Logic
+The user must be able to run an advanced search with differents type of criteria 
+
+The informations needed can be:  
+- A age gap.  
+- A fame rating gap.  
+- A location. (BONUS: add a range)  
+- One or multiple interests tags.  
+
+Blocked user doesn't appear in the search.  
+We need to retrieve a list of profile that match the informations given.
+
 Throw an error if it doesn´t work.
