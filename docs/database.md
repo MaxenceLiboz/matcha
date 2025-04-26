@@ -66,3 +66,10 @@ A User_viewed table to have a many to many relationships between users blocked h
 A Fake_account table to hold every user that has been reported as faked:  
 - id: userId ???   
 - id: fakeUserId  
+
+## Notification table
+A notification table that old for each user serveral notification
+- id: userId
+- boolean: status
+- string: message
+- enum/string: type 
