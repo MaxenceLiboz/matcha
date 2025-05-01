@@ -18,6 +18,13 @@ A profile table holding:
 - int: frame rating  
 - ?: GPS location (May have to create table for that)  
 
+## Location
+A location table:
+- id: userId
+- int: latitude
+- int: longitude
+- String: city
+
 ## Verification table
 A verification table holding:  
 - String: unique token  
