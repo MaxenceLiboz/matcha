@@ -1,0 +1,56 @@
+services:
+  db:
+    image: mysql:lts
+    container_name: database
+    env_file:
+      - ./config/database/.env
+    ports:
+      - "8306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  backend:
+      image: backend
+      container_name: backend
+      build:
+          dockerfile: ./config/backend/Dockerfile
+      volumes:
+          - ./backend:/backend
+          - ./config/backend/.env:/.env
+      command: /entrypoint.sh
+      networks:
+          - db_network
+
+  # frontend:
+  #     image: frontend
+  #     build:
+  #         dockerfile: ./docker/frontend.Dockerfile
+  #     container_name: frontend
+  #     volumes:
+  #         - frontend:/frontend
+  #         - shared:/shared
+  #     ports:
+  #         - 3000:3000
+  #     command: /entrypoint.sh
+  #     networks:
+  #         - db_network
+  #     env_file:
+  #         - ./config/.front-dev.env
+  #     depends_on:
+  #         - backend
+
+networks:
+    db_network:
+        driver: bridge
+
+volumes:
+    db_data:
+      name: mysql-volume
+
+    # shared:
+    #     driver: local
+    #     name: shared-volume
+    #     driver_opts:
+    #         type: none
+    #         device: ${PWD}/shared
+    #         o: bind
