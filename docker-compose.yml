@@ -18,6 +18,7 @@ services:
       dockerfile: ./config/backend/Dockerfile
     ports:
       - "8000:8000"
+      - "9229:9229"
     volumes:
       - ./backend:/backend
     command: /entrypoint.sh

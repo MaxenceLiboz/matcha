@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node-dev --poll ./srcs/index.ts",
     "build": "rimraf ./dist && tsc",
-    "start": "npm run build && node dist/index.js"
+    "start": "npm run build && node dist/index.js",
+    "dev": "ts-node-dev --inspect=0.0.0.0:9229 --poll ./srcs/index.ts"
   },
   "keywords": [],
   "author": "",
