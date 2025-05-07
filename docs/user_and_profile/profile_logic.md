@@ -5,14 +5,14 @@
 ### Logic
 The goal here is to create the profil of a new user
 
-The information needed are: 
-- Age
-- The gender: Male/Female
-- Sexual preference: Hétéro/Homo/Other(other will be concider as Bi)
-- A biography
-- List of interest represented by tags (User must be able to add new ones and re-use other user's one)
-- Up to 5 pictures, include one profile picture.
-- Localisation (optionnal)
+The information needed are:   
+- Age  
+- The gender: Male/Female  
+- Sexual preference: Hétéro/Homo/Other(other will be concider as Bi)  
+- A biography  
+- List of interest represented by tags (User must be able to add new ones and re-use other user's one)  
+- Up to 5 pictures, include one profile picture.  
+- Localisation (optionnal)  
 
 We need to create a new profile with the given values.  
 If the location isn´t given we should find a way to find it.  
