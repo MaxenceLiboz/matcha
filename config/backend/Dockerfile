@@ -12,4 +12,5 @@ RUN chmod +x /entrypoint.sh
 # COPY ./config/.back-dev.env /config/.back-dev.env
 
 
-# WORKDIR /backend
+WORKDIR /backend
+# ENTRYPOINT [ "tail", "-f", "/dev/null" ]

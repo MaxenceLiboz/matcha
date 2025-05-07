@@ -1,10 +1,12 @@
 all: start
 
 start:
-	docker compose up -d
+	docker compose up -d --force-recreate
 
 stop:
-	docker compose down
+	docker compose down 
+
+re: reset start
 
 reset:
 	docker compose down -v --rmi "all"
