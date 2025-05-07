@@ -7,10 +7,10 @@ assignees: ''
 
 ---
 
-**Contexte**
+>Contexte
 
 
-**Info dev**
+>Info dev
 
 
-**Attendu**
+>Attendu
