@@ -17,7 +17,7 @@ services:
     build:
       dockerfile: ./config/backend/Dockerfile
     ports:
-      - "8000:8000"
+      - "8001:8000"
       - "9229:9229" # Debug
     volumes:
       - ./backend:/backend
@@ -35,8 +35,8 @@ services:
     volumes:
       - ./frontend:/frontend
     command: /entrypoint.sh
-    networks:
-      - db_network
+    depends_on:
+      - backend
 
 networks:
     db_network:
