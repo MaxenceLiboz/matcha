@@ -18,30 +18,25 @@ services:
       dockerfile: ./config/backend/Dockerfile
     ports:
       - "8000:8000"
-      - "9229:9229"
+      - "9229:9229" # Debug
     volumes:
       - ./backend:/backend
     command: /entrypoint.sh
     networks:
       - db_network
 
-  # frontend:
-  #     image: frontend
-  #     build:
-  #         dockerfile: ./docker/frontend.Dockerfile
-  #     container_name: frontend
-  #     volumes:
-  #         - frontend:/frontend
-  #         - shared:/shared
-  #     ports:
-  #         - 3000:3000
-  #     command: /entrypoint.sh
-  #     networks:
-  #         - db_network
-  #     env_file:
-  #         - ./config/.front-dev.env
-  #     depends_on:
-  #         - backend
+  frontend:
+    image: frontend
+    container_name: frontend
+    build:
+      dockerfile: ./config/frontend/Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./frontend:/frontend
+    command: /entrypoint.sh
+    networks:
+      - db_network
 
 networks:
     db_network:
