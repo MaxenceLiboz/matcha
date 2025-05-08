@@ -35,8 +35,8 @@ services:
     volumes:
       - ./frontend:/frontend
     command: /entrypoint.sh
-    networks:
-      - db_network
+    depends_on:
+      - backend
 
 networks:
     db_network:

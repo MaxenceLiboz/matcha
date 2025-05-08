@@ -1,2 +1,3 @@
 npm i -y
-npm start 
+
+npm run dev
