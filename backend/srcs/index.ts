@@ -1,6 +1,7 @@
 import express, { Express, Request, Response } from "express";
+import dotenv from "dotenv";
 
-require("dotenv").config();
+dotenv.config();
 const app: Express = express();
 
 app.get("/", (req: Request, res: Response) => {
