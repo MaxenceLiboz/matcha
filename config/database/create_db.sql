@@ -3,7 +3,7 @@
 -- Create the User table
 CREATE TABLE IF NOT EXISTS User (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    email VARCHAR(100) UNIQUE NOT NULL,
+    email VARCHAR(50) UNIQUE NOT NULL,
     username VARCHAR(50) UNIQUE NOT NULL,
     last_name VARCHAR(50) NOT NULL,
     first_name VARCHAR(50) NOT NULL,
@@ -35,9 +35,9 @@ CREATE TABLE IF NOT EXISTS Location (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT UNIQUE NOT NULL,
     FOREIGN KEY (user_id) REFERENCES User(id) ON DELETE CASCADE,
-    latitude DECIMAL(10, 8),
-    longitude DECIMAL(11, 8),
-    city VARCHAR(255),
+    latitude DECIMAL(8, 6),
+    longitude DECIMAL(9, 6),
+    city VARCHAR(50),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS Verification (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
     FOREIGN KEY (user_id) REFERENCES User(id) ON DELETE CASCADE,
-    unique_token VARCHAR(255) UNIQUE NOT NULL,
+    unique_token VARCHAR(500) UNIQUE NOT NULL,
     expiration_date DATETIME NOT NULL,
     type ENUM('email_verification', 'password_reset') NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS Verification (
 -- Create the Tag table
 CREATE TABLE IF NOT EXISTS Tag (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) UNIQUE NOT NULL,
+    name VARCHAR(50) UNIQUE NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
