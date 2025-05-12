@@ -1,7 +1,9 @@
 services:
   db:
-    image: mysql:lts
+    image: database
     container_name: database
+    build:
+      dockerfile: ./config/database/Dockerfile
     env_file:
       - ./config/database/.env
     ports:
