@@ -105,3 +105,5 @@ Therefore we will separate our folder into this:
 |
 |-- config/                  # Environment variables, app configuration
 ```
+
+We will use [Tanstack](https://tanstack.com/query/latest/docs/reference/QueryClient) to manage our context and api querying.  
