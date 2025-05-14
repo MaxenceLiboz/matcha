@@ -9,7 +9,7 @@ Therefore we will separate our folder into this:
 ```
 /src  
 |-- domain/                  # 1. Innermost: Hold everyting releated to entites  
-|   |-- info/            # Core classes (e.g., User.ts, Profile.ts) - Plain classes  
+|   |-- entities/            # Core classes (e.g., User.ts, Profile.ts) - Plain classes  
 |   |-- repositories/        # **<< INTERFACES ONLY >>** (e.g., IUserRepository.ts, IProfileRepository.ts) - Defines contracts for specific entities  
 |   |-- errors/              # (Optional) Custom domain-specific errors  
 |  
