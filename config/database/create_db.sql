@@ -46,14 +46,16 @@
         unique_token VARCHAR(500) UNIQUE NOT NULL,
         expiration_date DATETIME NOT NULL,
         type ENUM('email_verification', 'password_reset') NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     );
 
     -- Create the Tag table
     CREATE TABLE IF NOT EXISTS Tag (
         id INT AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(50) UNIQUE NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     );
 
     -- Create the User_Tag table (Many-to-Many between User and Tag)
@@ -63,7 +65,8 @@
         FOREIGN KEY (user_id) REFERENCES User(id) ON DELETE CASCADE,
         tag_id INT NOT NULL,
         FOREIGN KEY (tag_id) REFERENCES Tag(id) ON DELETE CASCADE,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     );
 
     -- Create the Picture table
@@ -74,7 +77,8 @@
         ref VARCHAR(500) NOT NULL,
         mime_type VARCHAR(50),
         is_profile BOOLEAN DEFAULT FALSE,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     );
 
     -- Create the User_like table (Many-to-Many for user likes)
@@ -85,6 +89,7 @@
         liked_user_id INT NOT NULL,
         FOREIGN KEY (liked_user_id) REFERENCES User(id) ON DELETE CASCADE,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         -- Prevent the user to like himself
         CHECK (user_id != liked_user_id)
     );
@@ -97,6 +102,7 @@
         disliked_user_id INT NOT NULL,
         FOREIGN KEY (disliked_user_id) REFERENCES User(id) ON DELETE CASCADE,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         -- Prevent the user to dislike himself
         CHECK (user_id != disliked_user_id)
     );
@@ -109,6 +115,7 @@
         viewed_user_id INT NOT NULL,
         FOREIGN KEY (viewed_user_id) REFERENCES User(id) ON DELETE CASCADE,
         viewed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         -- Prevent the user to view himself
         CHECK (user_id != viewed_user_id)
     );
@@ -121,6 +128,7 @@
         blocked_user_id INT NOT NULL,
         FOREIGN KEY (blocked_user_id) REFERENCES User(id) ON DELETE CASCADE,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         -- Prevent the user to block himself
         CHECK (user_id != blocked_user_id)
     );
@@ -134,6 +142,7 @@
         FOREIGN KEY (fake_user_id) REFERENCES User(id) ON DELETE CASCADE,
         reason TEXT, -- Optional: reason for reporting
         reported_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         -- Prevent the user to report himself as fake
         CHECK (reported_by_user_id != fake_user_id)
     );
@@ -146,7 +155,8 @@
         status BOOLEAN DEFAULT FALSE,
         message VARCHAR(500) NOT NULL,
         type ENUM('like', 'view', 'message', 'match', 'report', 'other') NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     );
 
     -- Create the Conversation table
@@ -163,8 +173,9 @@
         user_id INT NOT NULL,
         PRIMARY KEY (conversation_id, user_id),
         FOREIGN KEY (conversation_id) REFERENCES Conversation(id) ON DELETE CASCADE,
-        joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (user_id) REFERENCES User(id) ON DELETE CASCADE
+        FOREIGN KEY (user_id) REFERENCES User(id) ON DELETE CASCADE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     );
 
     -- Create the Message table
@@ -175,8 +186,9 @@
         sender_id INT NOT NULL,
         FOREIGN KEY (sender_id) REFERENCES User(id) ON DELETE CASCADE,
         content TEXT NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         is_read BOOLEAN DEFAULT FALSE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         -- Index for efficiently retrieving messages for a conversation, ordered by time
         INDEX idx_conversation_messages (conversation_id, created_at)
     );
