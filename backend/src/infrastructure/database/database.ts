@@ -7,9 +7,9 @@ const dialect = new MysqlDialect({
   pool: createPool({
     database: config.MYSQL_DATABASE,
     host: config.HOST,
+    port: config.MYSQL_PORT,
     user: config.MYSQL_USER,
     password: config.MYSQL_PASSWORD,
-    port: config.PORT,
     connectionLimit: 10,
   })
 })
