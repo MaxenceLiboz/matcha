@@ -8,9 +8,9 @@
         last_name VARCHAR(50) NOT NULL,
         first_name VARCHAR(50) NOT NULL,
         password_hash VARCHAR(500) NOT NULL,
-        verified BOOLEAN DEFAULT FALSE,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        verified BOOLEAN DEFAULT FALSE NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL
     );
 
     -- Create the Profile table
@@ -22,8 +22,8 @@
         gender ENUM('Male', 'Female', 'Other'),
         sexual_preference ENUM('Heterosexual', 'Homosexual', 'Other'),
         frame_rating INT,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL
     );
 
     -- Create the Location table
@@ -34,8 +34,8 @@
         latitude DECIMAL(8, 6),
         longitude DECIMAL(9, 6),
         city VARCHAR(50),
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL
     );
 
     -- Create the Verification table
@@ -46,16 +46,16 @@
         unique_token VARCHAR(500) UNIQUE NOT NULL,
         expiration_date DATETIME NOT NULL,
         type ENUM('email_verification', 'password_reset') NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL
     );
 
     -- Create the Tag table
     CREATE TABLE IF NOT EXISTS Tag (
         id INT AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(50) UNIQUE NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL
     );
 
     -- Create the User_Tag table (Many-to-Many between User and Tag)
@@ -65,8 +65,8 @@
         FOREIGN KEY (user_id) REFERENCES User(id) ON DELETE CASCADE,
         tag_id INT NOT NULL,
         FOREIGN KEY (tag_id) REFERENCES Tag(id) ON DELETE CASCADE,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL
     );
 
     -- Create the Picture table
@@ -77,8 +77,8 @@
         ref VARCHAR(500) NOT NULL,
         mime_type VARCHAR(50),
         is_profile BOOLEAN DEFAULT FALSE,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL
     );
 
     -- Create the User_like table (Many-to-Many for user likes)
@@ -88,8 +88,8 @@
         FOREIGN KEY (user_id) REFERENCES User(id) ON DELETE CASCADE,
         liked_user_id INT NOT NULL,
         FOREIGN KEY (liked_user_id) REFERENCES User(id) ON DELETE CASCADE,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
         -- Prevent the user to like himself
         CHECK (user_id != liked_user_id)
     );
@@ -101,8 +101,8 @@
         FOREIGN KEY (user_id) REFERENCES User(id) ON DELETE CASCADE,
         disliked_user_id INT NOT NULL,
         FOREIGN KEY (disliked_user_id) REFERENCES User(id) ON DELETE CASCADE,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
         -- Prevent the user to dislike himself
         CHECK (user_id != disliked_user_id)
     );
@@ -115,7 +115,7 @@
         viewed_user_id INT NOT NULL,
         FOREIGN KEY (viewed_user_id) REFERENCES User(id) ON DELETE CASCADE,
         viewed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
         -- Prevent the user to view himself
         CHECK (user_id != viewed_user_id)
     );
@@ -127,8 +127,8 @@
         FOREIGN KEY (user_id) REFERENCES User(id) ON DELETE CASCADE,
         blocked_user_id INT NOT NULL,
         FOREIGN KEY (blocked_user_id) REFERENCES User(id) ON DELETE CASCADE,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
         -- Prevent the user to block himself
         CHECK (user_id != blocked_user_id)
     );
@@ -142,7 +142,7 @@
         FOREIGN KEY (fake_user_id) REFERENCES User(id) ON DELETE CASCADE,
         reason TEXT, -- Optional: reason for reporting
         reported_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
         -- Prevent the user to report himself as fake
         CHECK (reported_by_user_id != fake_user_id)
     );
@@ -155,16 +155,16 @@
         status BOOLEAN DEFAULT FALSE,
         message VARCHAR(500) NOT NULL,
         type ENUM('like', 'view', 'message', 'match', 'report', 'other') NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL
     );
 
     -- Create the Conversation table
     -- Represents a chat thread between users.
     CREATE TABLE IF NOT EXISTS Conversation (
         id INT AUTO_INCREMENT PRIMARY KEY,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL
     );
 
     -- Create the Conversation_Participant table (Many-to-Many)
@@ -174,8 +174,8 @@
         PRIMARY KEY (conversation_id, user_id),
         FOREIGN KEY (conversation_id) REFERENCES Conversation(id) ON DELETE CASCADE,
         FOREIGN KEY (user_id) REFERENCES User(id) ON DELETE CASCADE,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL
     );
 
     -- Create the Message table
@@ -187,8 +187,8 @@
         FOREIGN KEY (sender_id) REFERENCES User(id) ON DELETE CASCADE,
         content TEXT NOT NULL,
         is_read BOOLEAN DEFAULT FALSE,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
         -- Index for efficiently retrieving messages for a conversation, ordered by time
         INDEX idx_conversation_messages (conversation_id, created_at)
     );

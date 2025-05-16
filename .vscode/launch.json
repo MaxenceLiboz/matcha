@@ -6,8 +6,8 @@
             "request": "attach",
             "port": 9229,
             "address": "localhost",
-            "localRoot": "${workspaceFolder}/backend/srcs",
-            "remoteRoot": "/backend/srcs/",
+            "localRoot": "${workspaceFolder}/backend/src",
+            "remoteRoot": "/backend/src/",
         }
     ]
 }

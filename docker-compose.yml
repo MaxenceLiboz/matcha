@@ -12,6 +12,11 @@ services:
       - db_data:/var/lib/mysql
     networks:
       - db_network
+    healthcheck:
+      test: ["CMD-SHELL", 'mysqladmin ping']
+      interval: 10s
+      timeout: 2s
+      retries: 10
 
   backend:
     image: backend
@@ -26,19 +31,22 @@ services:
     command: /entrypoint.sh
     networks:
       - db_network
-
-  frontend:
-    image: frontend
-    container_name: frontend
-    build:
-      dockerfile: ./config/frontend/Dockerfile
-    ports:
-      - "8000:3000"
-    volumes:
-      - ./frontend:/frontend
-    command: /entrypoint.sh
     depends_on:
-      - backend
+      db:
+        condition: service_healthy
+        restart: true
+  # frontend:
+  #   image: frontend
+  #   container_name: frontend
+  #   build:
+  #     dockerfile: ./config/frontend/Dockerfile
+  #   ports:
+  #     - "8000:3000"
+  #   volumes:
+  #     - ./frontend:/frontend
+  #   command: /entrypoint.sh
+  #   depends_on:
+  #     - backend
 
 networks:
     db_network:
@@ -47,11 +55,3 @@ networks:
 volumes:
     db_data:
       name: mysql-volume
-
-    # shared:
-    #     driver: local
-    #     name: shared-volume
-    #     driver_opts:
-    #         type: none
-    #         device: ${PWD}/shared
-    #         o: bind

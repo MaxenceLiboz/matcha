@@ -39,7 +39,7 @@ Therefore we will separate our folder into this:
 |-- main.ts / index.ts       # Composition Root: Initializes everything, starts the server etc.  
 ```
 
-## Frontemd architecture
+## Frontend architecture
 
 ```
 /src
