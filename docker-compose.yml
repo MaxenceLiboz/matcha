@@ -18,6 +18,20 @@ services:
       timeout: 2s
       retries: 10
 
+  script_bootstrap_db:
+    image : script_bootstrap_db
+    container_name: script_bootstrap_db
+    build:
+      dockerfile: ./config/script_bootstrap_db/Dockerfile
+    env_file:
+      - ./config/script_bootstrap_db/.env
+    command: /entrypoint.sh
+    networks:
+      - db_network
+    depends_on:
+      db:
+        condition: service_healthy
+
   backend:
     image: backend
     container_name: backend
@@ -50,6 +64,7 @@ services:
       db:
         condition: service_healthy
         restart: true
+
 
 networks:
     db_network:
