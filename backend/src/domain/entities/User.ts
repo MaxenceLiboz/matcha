@@ -1,4 +1,6 @@
 import { AbstractEntity } from "@domain/entities/AbstractEntity";
+import { CustomError } from "@domain/erros/CustomError";
+import { HTTP_STATUS } from "@domain/erros/HTTP_StatusEnum";
 
 export class User extends AbstractEntity {
 
@@ -35,8 +37,12 @@ export class User extends AbstractEntity {
         username: string,
         verified?: boolean
     ): User {
+        // let error: boolean = false;
+        // let message: string;
+        // if (!email || !email.match("^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$")) 
+
         if (!email || !first_name || !last_name || !username) {
-            throw new Error(`Everything is required [email: ${email}, first_name: ${first_name}, last_name: ${last_name}, username: ${username}]`);
+            throw new CustomError(`Everything is required [email: ${email}, first_name: ${first_name}, last_name: ${last_name}, username: ${username}]`, HTTP_STATUS.BAD_REQUEST);
         }
         // id, created_at, updated_at are created by the DB
         return new User(email, first_name, last_name, username, verified);

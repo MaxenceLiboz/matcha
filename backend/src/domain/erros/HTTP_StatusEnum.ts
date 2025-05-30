@@ -1,0 +1,6 @@
+export enum HTTP_STATUS {
+    CONFLICT = 409,
+    NOT_FOUND = 404,
+    UNPROCESSABLE_ENTITY = 422,
+    BAD_REQUEST = 400
+}

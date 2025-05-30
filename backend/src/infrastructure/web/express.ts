@@ -1,5 +1,6 @@
 import express, { Application } from 'express';
 import { userRoutes } from '@infrastructure/web/routes/userRoutes';
+import errorMiddleware from './middleware/errorMiddleware';
 
 export function createApp(): Application {
     const app = express();
@@ -15,6 +16,9 @@ export function createApp(): Application {
     app.use('/api/v1/user', userRoutes);
     
     // Add other middleware here
+
+    // Error middleware must be at the end
+    app.use(errorMiddleware);
 
     return app;
 }

@@ -4,6 +4,8 @@ import { UserService } from '@application/services/userService';
 import { CreateUserUseCase } from '@application/use_cases/userUseCases';
 import { UserController } from '../controllers/userController';
 import { db } from '@infrastructure/database/database';
+import validationMiddleware from '../middleware/validator/validatorMiddleware';
+import { CreateUserSchema } from '@application/dtos/user.dto';
 
 export const userRoutes = Router();
 
@@ -15,4 +17,4 @@ const userService = new UserService(createUserUseCase);
 const userController = new UserController(userService);
 
 
-userRoutes.post('/', (req, res, next) => userController.createUser(req, res, next));
+userRoutes.post('/', validationMiddleware(CreateUserSchema), (req, res, next) => userController.createUser(req, res, next));
