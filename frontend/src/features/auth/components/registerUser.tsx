@@ -1,4 +1,3 @@
-// src/features/auth/components/RegisterForm.tsx
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { TextField, Button, Box, Typography, Alert, CircularProgress } from '@mui/material';
