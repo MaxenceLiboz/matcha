@@ -33,10 +33,12 @@ export default function validationMiddleware(
 
         if (validationErrors.length > 0) {
             res.status(HTTP_STATUS.BAD_REQUEST).json({
-                message: "Validation failed",
-                errors: validationErrors,
-                statutCode: HTTP_STATUS.BAD_REQUEST
+                error: {
+                    message: validationErrors.map(errorObj => `${errorObj.message}`).join("\n"),
+                    statutCode: HTTP_STATUS.BAD_REQUEST
+                }
             });
+            return;
         }
 
         next();

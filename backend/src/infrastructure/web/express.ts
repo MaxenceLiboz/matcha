@@ -1,11 +1,14 @@
 import express, { Application } from 'express';
 import { userRoutes } from '@infrastructure/web/routes/userRoutes';
 import errorMiddleware from './middleware/errorMiddleware';
+import cors from 'cors'
 
 export function createApp(): Application {
     const app = express();
 
-    app.use(express.json()); // Middleware to parse JSON bodies
+    app.use(cors({credentials: true, origin: 'http://localhost:8000'}))
+
+    app.use(express.json());
 
     // Main route
     app.get('/', (req, res) => {

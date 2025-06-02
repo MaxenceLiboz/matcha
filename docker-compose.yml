@@ -35,18 +35,19 @@ services:
       db:
         condition: service_healthy
         restart: true
-  # frontend:
-  #   image: frontend
-  #   container_name: frontend
-  #   build:
-  #     dockerfile: ./config/frontend/Dockerfile
-  #   ports:
-  #     - "8000:3000"
-  #   volumes:
-  #     - ./frontend:/frontend
-  #   command: /entrypoint.sh
-  #   depends_on:
-  #     - backend
+
+  frontend:
+    image: frontend
+    container_name: frontend
+    build:
+      dockerfile: ./config/frontend/Dockerfile
+    ports:
+      - "8000:3000"
+    volumes:
+      - ./frontend:/frontend
+    command: /entrypoint.sh
+    depends_on:
+      - backend
 
 networks:
     db_network:

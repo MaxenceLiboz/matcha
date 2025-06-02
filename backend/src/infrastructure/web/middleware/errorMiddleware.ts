@@ -1,6 +1,5 @@
 import { CustomError } from "@domain/erros/CustomError";
 import { NextFunction, Request, Response } from "express";
-import { Next } from "mysql2/typings/mysql/lib/parsers/typeCast";
 
 export default function errorMiddleware(
     error: unknown,
