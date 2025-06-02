@@ -6,6 +6,7 @@ import { UserController } from '../controllers/userController';
 import { db } from '@infrastructure/database/database';
 import validationMiddleware from '../middleware/validator/validatorMiddleware';
 import { CreateUserSchema } from '@application/dtos/user.dto';
+import { Verification } from '@domain/entities/Verification';
 
 export const userRoutes = Router();
 

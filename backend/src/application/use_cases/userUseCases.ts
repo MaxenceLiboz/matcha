@@ -18,7 +18,6 @@ export class CreateUserUseCase {
             throw new UsernameInUseError(data.username);
         }
 
-
         // Needs to add hashing the password with bycript
         const hash_password = await bcrypt.hash(data.password, 10);
         
@@ -26,8 +25,11 @@ export class CreateUserUseCase {
         try {
             const savedUser = await this.userRepository.save(userToSave, hash_password);
             
+            if (!savedUser.id) {
+                throw new UnprocessableEntity("Creation of the user failed.");
+            }
             return {
-                // id: savedUser.id,
+                id: savedUser.id,
                 email: savedUser.email,
                 first_name: savedUser.first_name,
                 last_name: savedUser.last_name,

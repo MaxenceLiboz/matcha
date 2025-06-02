@@ -20,7 +20,7 @@ export const CreateUserSchema : SchemaDefinition  = {
   
 // Output DTO for user responses
 export interface UserResponseDTO {
-    // id: string;
+    id: number;
     email: string;
     username: string;
     last_name: string;
