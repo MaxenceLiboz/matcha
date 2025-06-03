@@ -1,8 +1,11 @@
 import mysql.connector
 from faker import Faker
+import random
 import os
 
 try:
+
+    # CREATING A CONNECTION TO THE DATABASE
 
     db_host = os.environ.get("MYSQL_HOST", 'db')
     db_user = os.environ.get("MYSQL_USER")
@@ -18,7 +21,27 @@ try:
         database=db_name
     )
 
+    mycursor = mydb.cursor()
+
+    # CLEARING THE DATABASE
+
+    mycursor.execute(f'USE {db_name}')
+    mycursor.execute("SHOW TABLES")
+
+
+    rows = mycursor.fetchall()
+
+    mycursor.execute("SET FOREIGN_KEY_CHECKS = 0")
+
+    for row in rows:
+        mycursor.execute(f'TRUNCATE {row[0]}')
+
+    mycursor.execute("SET FOREIGN_KEY_CHECKS = 1")
+
+    # FILLING THE USER TABLE
+
     fake = Faker()
+    
     val = []
 
     for _ in range(500):
@@ -30,11 +53,7 @@ try:
         password_hash = fake.unique.password()
 
         val.append((email, username, last_name, first_name, password_hash))
-
-
-
-    mycursor = mydb.cursor()
-
+    
     sql = "INSERT INTO User (email, username, last_name, first_name, password_hash) VALUES  (%s, %s, %s, %s, %s)"
 
     mycursor.executemany(sql, val)

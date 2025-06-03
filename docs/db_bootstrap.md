@@ -1,12 +1,21 @@
 # Objective
 
-The objective is to fill the database with 500 Users when we launch the database container.
+The objective is to clear and fill the database with 500 Users when we launch the database container.
 
 # mysql.connector
 
 ## Utility
 
 Create a connection with our database in our script, so we can launch mysql commands.
+
+# Use of TRUNCATE to clear the DB 
+
+## Difference between TRUNCATE and DELETE
+
+- TRUNCATE reset the ids when clearing a table (excepet with PostgreSQL), when DELETE keep the increment at his value 
+- DELETE perform the deletion of a table row by row (using the WHERE statement), but in our case, we do not care about performing a row by row deletion because we want to clear our database entierly
+
+[to get more info](https://www.dbvis.com/thetable/truncate-vs-delete-sql-comparison-of-the-two-statements/)
 
 # Faker Library
 
