@@ -27,7 +27,7 @@ export class VerificationMapper {
 
     static toPersistenceUpdate(domainVerification: Verification): Updateable<VerificationTable> {
         return {
-            expiration_date: domainVerification.expiration_date,
+            expiration_date: domainVerification.expiration_date
         };
     }
 }

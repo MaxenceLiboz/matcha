@@ -1,9 +1,11 @@
 import { User } from '@domain/entities/User';
 import { IUserRepository } from '@domain/repositories/IUserRepository';
-import { CreateUserDTO, UserResponseDTO } from '@application/dtos/user.dto';
+import { CreateUserDTO, UserResponseDTO, UserVerificationDTO } from '@application/dtos/user.dto';
 import { EmailInUseError, UsernameInUseError } from '@domain/erros/UserErros';
 import { UnprocessableEntity } from '@domain/erros/UnprocessableEntity';
 import bcrypt from 'bcrypt';
+import { CustomError } from '@domain/erros/CustomError';
+import { HTTP_STATUS } from '@domain/erros/HTTP_StatusEnum';
 
 export class CreateUserUseCase {
     constructor(private readonly userRepository: IUserRepository) {}
@@ -40,6 +42,27 @@ export class CreateUserUseCase {
             throw new UnprocessableEntity("Creation of the user failed.", error);
         }
     }
-  }
+}
+
+export class GetUserUseCase {
+    constructor(private readonly userRepository: IUserRepository) {}
+
+    async execute(data: UserVerificationDTO) : Promise<UserResponseDTO> {
+        const user = await this.userRepository.getUserByUsernameAndEmail(data.username, data.email);
+
+        if (!user || !user.id) {
+            throw new CustomError("Cannot find user", HTTP_STATUS.NOT_FOUND);
+        }
+        
+        return {
+            id: user.id,
+            email: user.email,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            username: user.username,
+            verified: user.verified
+        };
+    }
+}
 
   

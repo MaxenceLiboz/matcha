@@ -41,7 +41,7 @@
     -- Create the Verification table
     CREATE TABLE IF NOT EXISTS Verification (
         id INT AUTO_INCREMENT PRIMARY KEY,
-        user_id INT UNIQUE NOT NULL,
+        user_id INT NOT NULL,
         FOREIGN KEY (user_id) REFERENCES User(id) ON DELETE CASCADE,
         unique_token VARCHAR(500) UNIQUE NOT NULL,
         expiration_date DATETIME NOT NULL,

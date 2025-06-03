@@ -2,6 +2,8 @@ import { HTTP_STATUS } from "@domain/erros/HTTP_StatusEnum";
 import { AbstractEntity } from "./AbstractEntity";
 import { CustomError } from "@domain/erros/CustomError";
 
+
+
 export class Verification extends AbstractEntity {
     public expiration_date: Date;
     public type: "email_verification" | "password_reset";

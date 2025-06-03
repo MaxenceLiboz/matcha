@@ -27,3 +27,14 @@ export interface UserResponseDTO {
     first_name: string;
     verified: boolean;
 }
+
+export interface UserVerificationDTO {
+    email: string;
+    username: string;
+}
+
+// Input DTO for creating a user
+export const UserVerificationSchema : SchemaDefinition  = {
+    email: [{type: VALIDATOR.REQUIRED}, {type: VALIDATOR.EMAIL}],
+    username: [{type: VALIDATOR.REQUIRED}, {type: VALIDATOR.MIN_LENGTH, arg: 4}, {type: VALIDATOR.MAX_LENGTH, arg: 50}],
+}

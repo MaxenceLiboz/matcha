@@ -7,24 +7,12 @@ import { CustomError } from '@domain/erros/CustomError';
 import { HTTP_STATUS } from '@domain/erros/HTTP_StatusEnum';
 import { UnprocessableEntity } from '@domain/erros/UnprocessableEntity';
 import { UserNotFoundError } from '@domain/erros/UserErros';
+import { AbstractRepositoryImpl, IMapper } from './AbstactRepositoryImpl';
 
 
-export class UserRepository implements IUserRepository {
-    constructor(private readonly db: Kysely<DB>) {}
-
-    async getUserById(id: number): Promise<User | null> {
-        if (!id) {
-            throw new CustomError('Id must not be null.', HTTP_STATUS.BAD_REQUEST);
-        }
-        const user = await this.db
-            .selectFrom('User')
-            .selectAll()
-            .where('id','=', id)
-            .executeTakeFirst();
-        if (!user) {
-            return null;
-        }
-        return UserMapper.toDomain(user);
+export class UserRepository  extends AbstractRepositoryImpl<User, 'User'>  implements IUserRepository {
+    constructor(db: Kysely<DB>) {
+        super(db, 'User', UserMapper as IMapper<Selectable<UserTable>, User>);
     }
 
     async getUserByUsernameOrEmail(username: string, email: string): Promise<User | null> {
@@ -45,16 +33,37 @@ export class UserRepository implements IUserRepository {
         return UserMapper.toDomain(user);
     }
 
+    async getUserByUsernameAndEmail(username: string, email: string): Promise<User | null> {
+        if (!username || !email) {
+            throw new CustomError('Username or email is undefined.', HTTP_STATUS.BAD_REQUEST);
+        }
+        const user = await this.db
+            .selectFrom('User')
+            .selectAll()
+            .where('username', '=', username)
+            .where('email', '=', email)
+            .executeTakeFirst();       
+        if (!user) {
+            return null;
+        }
+        return UserMapper.toDomain(user);
+    }
+
     async save(user: User, password_hash?: string): Promise<User> {
         if (user.id) { // Update if user already exist
             const updateData: Updateable<UserTable> = UserMapper.toPersistenceUpdate(user);
-            const updatedRecord = await this.db
+            await this.db
                 .updateTable('User')
                 .set(updateData)
                 .where('id', '=', user.id)
-                .returningAll()
                 .executeTakeFirstOrThrow();
-            return UserMapper.toDomain(updatedRecord);
+
+            const updated_user = await this.getById(user.id)
+
+            if (updated_user == null) {
+                throw new CustomError("Error occured while getting the updated user.", HTTP_STATUS.UNPROCESSABLE_ENTITY);
+            }
+            return updated_user;
         } else { // Insert otherwise
             if (!password_hash) {
                 throw new CustomError("Password is undefined while inserting a new user.", HTTP_STATUS.BAD_REQUEST);
@@ -69,7 +78,7 @@ export class UserRepository implements IUserRepository {
                 throw new UnprocessableEntity("Creation of the user failed.");
             }
 
-            const new_user = await this.getUserById(Number(insertedRecord.insertId))
+            const new_user = await this.getById(Number(insertedRecord.insertId))
 
             if (new_user == null) {
                 throw new CustomError("Error occured while getting the created user.", HTTP_STATUS.UNPROCESSABLE_ENTITY);
