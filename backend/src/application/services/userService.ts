@@ -2,6 +2,8 @@ import { CreateUserUseCase } from '@application/use_cases/userUseCases';
 import { CreateUserDTO, UserResponseDTO } from '@application/dtos/user.dto';
 import { CreateVerificationUseCase } from '@application/use_cases/verificationUseCases';
 import { SendEmailUseCase } from '@application/use_cases/sendEmailUseCase';
+import {v4 as uuidv4} from 'uuid';
+import { config } from '@infrastructure/config';
 
 export class UserService {
     constructor(
@@ -17,18 +19,19 @@ export class UserService {
         let expiration_date = new Date(); 
         expiration_date.setDate(expiration_date.getDate() + 1);
 
-        
+        // Create the verification token
         const verification = await this.createVerificationUseCase.execute({
             expiration_date: expiration_date,
             type: 'email_verification',
             user_id: user.id,
-            unique_token: window.crypto.randomUUID()
+            unique_token: uuidv4()
         });
 
+        // Send email
         this.sendEmailUseCase.execute({
             to: `${user.email}`,
             subject: "Verification de votre compte",
-            text: verification.unique_token,
+            text: `http://${config.FRONTEND_HOST}:${config.FRONTEND_PORT}/login?j=${verification.unique_token}`, // Change to link to frontend
         })
         
         return user;

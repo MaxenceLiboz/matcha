@@ -16,33 +16,18 @@ export class VerificationMapper {
         );
     }
 
-    static toPersistenceInsert(domainUser: User, password_hash: string): Insertable<UserTable> {
+    static toPersistenceInsert(domainVerification: Verification): Insertable<VerificationTable> {
         return {
-            email: domainUser.email,
-            first_name: domainUser.first_name,
-            last_name: domainUser.last_name,
-            username: domainUser.username,
-            password_hash: password_hash,
-            verified: 0
+            expiration_date: domainVerification.expiration_date,
+            type: domainVerification.type,
+            unique_token: domainVerification.unique_token,
+            user_id: domainVerification.user_id
         };
     }
 
-    static toPersistenceUpdate(domainUser: User, password_hash?: string): Updateable<UserTable> {
-        if (password_hash) {
-            return {
-                email: domainUser.email,
-                first_name: domainUser.first_name,
-                last_name: domainUser.last_name,
-                username: domainUser.username,
-                password_hash: password_hash,
-            };
-        } else {
-            return {
-                email: domainUser.email,
-                first_name: domainUser.first_name,
-                last_name: domainUser.last_name,
-                username: domainUser.username
-            };
-        } 
+    static toPersistenceUpdate(domainVerification: Verification): Updateable<VerificationTable> {
+        return {
+            expiration_date: domainVerification.expiration_date,
+        };
     }
 }

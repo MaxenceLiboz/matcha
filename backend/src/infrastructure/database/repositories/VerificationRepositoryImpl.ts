@@ -5,6 +5,7 @@ import { CustomError } from "@domain/erros/CustomError";
 import { HTTP_STATUS } from "@domain/erros/HTTP_StatusEnum";
 import { Verification } from "@domain/entities/Verification";
 import { UnprocessableEntity } from "@domain/erros/UnprocessableEntity";
+import { VerificationMapper } from "../mappers/VerificationMapper";
 
 export class VerificationRepository implements IVerificationRepository {
     constructor(private readonly db: Kysely<DB>) {}
@@ -24,7 +25,7 @@ export class VerificationRepository implements IVerificationRepository {
     }
 
     async save(verification: Verification): Promise<Verification> {
-        if (verification.id) { // Update if user already exist
+        if (verification.id) { // Update if verification already exist
             const updateData: Updateable<VerificationTable> = VerificationMapper.toPersistenceUpdate(verification);
             const updatedRecord = await this.db
                 .updateTable('Verification')
