@@ -16,33 +16,18 @@ export class UserService {
     async createUser(data: CreateUserDTO): Promise<UserResponseDTO> {
         const user = await this.createUserUseCase.execute(data);
 
-        // Create the expiration date
-        let expiration_date = new Date(); 
-        expiration_date.setDate(expiration_date.getDate() + 1);
-
-        // Create the verification token
-        const verification = await this.createVerificationUseCase.execute({
-            expiration_date: expiration_date,
-            type: 'email_verification',
-            user_id: user.id,
-            unique_token: uuidv4()
-        });
-
-        // Send email
-        this.sendEmailUseCase.execute({
-            to: `${user.email}`,
-            subject: "Verification de votre compte",
-            text: `http://${config.FRONTEND_HOST}:${config.FRONTEND_PORT}/login?j=${verification.unique_token}`,
-        })
-        
+        this.sendVerificationEmail(user);
         return user;
     }
 
     async sendUserVerification(data: UserVerificationDTO) : Promise<void> {
         const user = await this.getUserUseCase.execute(data);
 
-        // Create the expiration date
-        let expiration_date = new Date(); 
+        await this.sendVerificationEmail(user);
+    }
+
+    private async sendVerificationEmail(user: UserResponseDTO) {
+        let expiration_date = new Date();
         expiration_date.setDate(expiration_date.getDate() + 1);
 
         // Create the verification token
@@ -58,7 +43,6 @@ export class UserService {
             to: `${user.email}`,
             subject: "Verification de votre compte",
             text: `http://${config.FRONTEND_HOST}:${config.FRONTEND_PORT}/login?j=${verification.unique_token}`,
-        })
-
+        });
     }
 }
