@@ -1,7 +1,7 @@
 all: start
 
 start:
-	docker compose up -d --force-recreate
+	docker compose up --force-recreate -d
 
 stop:
 	docker compose down 
@@ -19,3 +19,12 @@ run-backend:
 
 run-frontend:
 	docker exec -it frontend bash
+
+restart-backend:
+	docker compose restart backend
+
+restart-frontend:
+	docker compose restart frontend
+
+restart-database:
+	docker compose restart database
