@@ -22,6 +22,20 @@ export class VerificationRepository extends AbstractRepositoryImpl<Verification,
             .execute();
     }
 
+    async getValidByToken(token: string): Promise<Verification | null> {
+        const verification =  await this.db
+            .selectFrom('Verification')
+            .selectAll()
+            .where('unique_token', '=', token)
+            .where('expiration_date', ">=", new Date(Date.now()))
+            .execute();
+        
+        if (verification.length === 1) {
+            return verification[0];
+        }
+        return null;
+    }
+
     async save(verification: Verification): Promise<Verification> {
         if (verification.id) { // Update if verification already exist
             const updateData: Updateable<VerificationTable> = VerificationMapper.toPersistenceUpdate(verification);

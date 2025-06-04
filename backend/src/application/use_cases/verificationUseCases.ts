@@ -22,3 +22,35 @@ export class CreateVerificationUseCase {
         return await this.verificationRepository.save(verification);
     }
 }
+
+export class GetValidVerificationByTokenUseCase {
+    constructor(private readonly verificationRepository: IVerificationRepository) {}
+
+    async execute(token: string) : Promise<Verification> {
+
+        if (!token) {
+            throw new CustomError('Token is undefined', HTTP_STATUS.UNPROCESSABLE_ENTITY);
+        }
+
+        const verification =  await this.verificationRepository.getValidByToken(token);
+        if (verification == null) {
+            throw new CustomError("No valid verification found with given token", HTTP_STATUS.NOT_FOUND);
+        }
+        return verification
+    }
+}
+
+export class ExpireVerificationUseCase {
+    constructor(private readonly verificationRepository: IVerificationRepository) {}
+
+    async execute(verification: Verification) : Promise<void> {
+
+        if (!verification.id) {
+            throw new CustomError('Can´t exprired verification without its id', HTTP_STATUS.UNPROCESSABLE_ENTITY);
+        }
+
+        verification.expiration_date = new Date(Date.now());
+
+        await this.verificationRepository.save(verification);
+    }
+}

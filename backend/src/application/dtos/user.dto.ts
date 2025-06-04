@@ -1,6 +1,5 @@
 import { SchemaDefinition, VALIDATOR } from "@infrastructure/web/middleware/validator/validatorTypes";
 
-// Input DTO for creating a user
 export interface CreateUserDTO {
     email: string;
     username: string;
@@ -8,8 +7,6 @@ export interface CreateUserDTO {
     first_name: string;
     password: string;
 }
-
-// Input DTO for creating a user
 export const CreateUserSchema : SchemaDefinition  = {
     email: [{type: VALIDATOR.REQUIRED}, {type: VALIDATOR.EMAIL}],
     username: [{type: VALIDATOR.REQUIRED}, {type: VALIDATOR.MIN_LENGTH, arg: 4}, {type: VALIDATOR.MAX_LENGTH, arg: 50}],
@@ -17,8 +14,7 @@ export const CreateUserSchema : SchemaDefinition  = {
     first_name: [{type: VALIDATOR.REQUIRED}, {type: VALIDATOR.MIN_LENGTH, arg: 4}, {type: VALIDATOR.MAX_LENGTH, arg: 50}],
     password: [{type: VALIDATOR.REQUIRED}, {type: VALIDATOR.PASSWORD}]
 }
-  
-// Output DTO for user responses
+
 export interface UserResponseDTO {
     id: number;
     email: string;
@@ -28,13 +24,18 @@ export interface UserResponseDTO {
     verified: boolean;
 }
 
-export interface UserVerificationDTO {
+export interface SendUserVerificationOrForgotPasswordDTO {
     email: string;
     username: string;
 }
-
-// Input DTO for creating a user
-export const UserVerificationSchema : SchemaDefinition  = {
+export const SendUserVerificationOrForgotPasswordSchema : SchemaDefinition  = {
     email: [{type: VALIDATOR.REQUIRED}, {type: VALIDATOR.EMAIL}],
     username: [{type: VALIDATOR.REQUIRED}, {type: VALIDATOR.MIN_LENGTH, arg: 4}, {type: VALIDATOR.MAX_LENGTH, arg: 50}],
+}
+
+export interface UserVerificationOrForgotPasswordDTO {
+    token: string;
+}
+export const UserVerificationOrForgotPasswordShema : SchemaDefinition  = {
+    token: [{type: VALIDATOR.REQUIRED}, {type: VALIDATOR.MIN_LENGTH, arg: 36}, {type: VALIDATOR.MAX_LENGTH, arg: 36}],
 }

@@ -1,6 +1,6 @@
 import { User } from '@domain/entities/User';
 import { IUserRepository } from '@domain/repositories/IUserRepository';
-import { CreateUserDTO, UserResponseDTO, UserVerificationDTO } from '@application/dtos/user.dto';
+import { CreateUserDTO, UserResponseDTO, SendUserVerificationOrForgotPasswordDTO } from '@application/dtos/user.dto';
 import { EmailInUseError, UsernameInUseError } from '@domain/erros/UserErros';
 import { UnprocessableEntity } from '@domain/erros/UnprocessableEntity';
 import bcrypt from 'bcrypt';
@@ -44,10 +44,10 @@ export class CreateUserUseCase {
     }
 }
 
-export class GetUserUseCase {
+export class GetUserByUsernameAndEmailUseCase {
     constructor(private readonly userRepository: IUserRepository) {}
 
-    async execute(data: UserVerificationDTO) : Promise<UserResponseDTO> {
+    async execute(data: SendUserVerificationOrForgotPasswordDTO) : Promise<UserResponseDTO> {
         const user = await this.userRepository.getUserByUsernameAndEmail(data.username, data.email);
 
         if (!user || !user.id) {
@@ -65,4 +65,22 @@ export class GetUserUseCase {
     }
 }
 
+export class VerifyUserUseCase {
+    constructor(private readonly userRepository: IUserRepository) {}
+
+    async execute(user_id: number) : Promise<void> {
+        const user = await this.userRepository.getById(user_id);
+
+        if (!user || !user.id) {
+            throw new CustomError("Cannot find user", HTTP_STATUS.NOT_FOUND);
+        }
+
+        if (user.verified == true) {
+            throw new CustomError("User already verified", HTTP_STATUS.CONFLICT);
+        }
+
+        user.verified = true;
+        await this.userRepository.save(user);
+    }
+}
   

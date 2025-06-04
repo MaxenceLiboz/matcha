@@ -1,15 +1,20 @@
-import { CreateUserUseCase, GetUserUseCase } from '@application/use_cases/userUseCases';
-import { CreateUserDTO, UserResponseDTO, UserVerificationDTO } from '@application/dtos/user.dto';
-import { CreateVerificationUseCase } from '@application/use_cases/verificationUseCases';
+import { CreateUserUseCase, VerifyUserUseCase, GetUserByUsernameAndEmailUseCase } from '@application/use_cases/userUseCases';
+import { CreateUserDTO, UserResponseDTO, SendUserVerificationOrForgotPasswordDTO, UserVerificationOrForgotPasswordDTO } from '@application/dtos/user.dto';
+import { CreateVerificationUseCase, ExpireVerificationUseCase, GetValidVerificationByTokenUseCase } from '@application/use_cases/verificationUseCases';
 import { SendEmailUseCase } from '@application/use_cases/sendEmailUseCase';
 import {v4 as uuidv4} from 'uuid';
 import { config } from '@infrastructure/config';
+import { CustomError } from '@domain/erros/CustomError';
+import { HTTP_STATUS } from '@domain/erros/HTTP_StatusEnum';
 
 export class UserService {
     constructor(
         private readonly createUserUseCase: CreateUserUseCase,
-        private readonly getUserUseCase: GetUserUseCase,
+        private readonly getUserByUsernameAndEmailUseCase: GetUserByUsernameAndEmailUseCase,
+        private readonly verifyUserUseCase: VerifyUserUseCase,
         private readonly createVerificationUseCase: CreateVerificationUseCase,
+        private readonly getValidVerificationByTokenUseCase: GetValidVerificationByTokenUseCase,
+        private readonly expireVerificationUseCase: ExpireVerificationUseCase,
         private readonly sendEmailUseCase: SendEmailUseCase
     ) {}
 
@@ -20,10 +25,28 @@ export class UserService {
         return user;
     }
 
-    async sendUserVerification(data: UserVerificationDTO) : Promise<void> {
-        const user = await this.getUserUseCase.execute(data);
+    async sendUserVerification(data: SendUserVerificationOrForgotPasswordDTO) : Promise<void> {
+        const user = await this.getUserByUsernameAndEmailUseCase.execute(data);
 
-        await this.sendVerificationEmail(user);
+        if (user.verified == false) {
+            await this.sendVerificationEmail(user);
+        }
+        throw new CustomError('User already verified, try to login', HTTP_STATUS.BAD_REQUEST);
+    }
+
+    async verifyUser(data: UserVerificationOrForgotPasswordDTO) : Promise<void> {
+        const verification = await this.getValidVerificationByTokenUseCase.execute(data.token);
+
+        // If token found is not good type throw
+        if (verification.type != 'email_verification') {
+            throw new CustomError("The token given is not an email verification token", HTTP_STATUS.BAD_REQUEST);
+        }
+        
+        // Verify the user link to the verification token
+        await this.verifyUserUseCase.execute(verification.user_id);
+
+        // Expire the current verification
+        await this.expireVerificationUseCase.execute(verification);
     }
 
     private async sendVerificationEmail(user: UserResponseDTO) {
