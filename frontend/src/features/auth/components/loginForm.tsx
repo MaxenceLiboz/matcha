@@ -1,5 +1,3 @@
-// ../components/LoginForm.tsx
-
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { TextField, Button, Box, Typography, Alert, CircularProgress, Link as MuiLink } from '@mui/material';
@@ -13,15 +11,7 @@ export const LoginForm: React.FC = () => {
     formState: { errors: formHookErrors },
   } = useForm<LoginFormValues>({});
 
-  const {serverError } = useLoginUser();
-  const navigate = useNavigate(); // For the resend validation link
-
-  const handleResendValidation = () => {
-    // Navigate to a new page/component dedicated to resending the validation link
-    // This page would typically just ask for the email again.
-    navigate('/send-email-verification'); // Example path
-  };
-
+  const { serverSuccess, serverError } = useLoginUser();
 
   return (
     <Box
@@ -42,6 +32,12 @@ export const LoginForm: React.FC = () => {
       <Typography variant="h5" component="h1" textAlign="center" gutterBottom>
         Login
       </Typography>
+
+      {serverSuccess && (
+        <Alert severity="success" sx={{ mt: 1 }}>
+          {serverSuccess}
+        </Alert>
+      )}
 
       <TextField
         label="Email"

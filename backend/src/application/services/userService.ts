@@ -30,6 +30,7 @@ export class UserService {
 
         if (user.verified == false) {
             await this.sendVerificationEmail(user);
+            return;
         }
         throw new CustomError('User already verified, try to login', HTTP_STATUS.BAD_REQUEST);
     }

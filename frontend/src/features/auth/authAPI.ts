@@ -1,5 +1,5 @@
 import apiClient from "../../api/apiClient";
-import { RegisterUserRequest, RegisterUserResponse, VerificationOrForgotPasswordRequest } from "./types";
+import { RegisterUserRequest, RegisterUserResponse, UserVerificationOrForgotPasswordRequest, VerificationOrForgotPasswordRequest } from "./types";
 
 export const registerUser = async (userData: RegisterUserRequest): Promise<RegisterUserResponse> => {
 	const { data } = await apiClient.post<RegisterUserResponse>('/user/', userData);
@@ -8,4 +8,8 @@ export const registerUser = async (userData: RegisterUserRequest): Promise<Regis
 
 export const userVerification = async (userData: VerificationOrForgotPasswordRequest): Promise<void> => {
 	await apiClient.post<RegisterUserResponse>('/user/verification', userData);
+};
+
+export const verifyUser = async (userData: UserVerificationOrForgotPasswordRequest): Promise<void> => {
+	await apiClient.post<RegisterUserResponse>('/user/verify-user', userData);
 };

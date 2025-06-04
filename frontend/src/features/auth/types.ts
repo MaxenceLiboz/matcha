@@ -19,3 +19,7 @@ export interface VerificationOrForgotPasswordRequest {
 	email: string;
 	username: string;
 }
+
+export interface UserVerificationOrForgotPasswordRequest {
+    token: string;
+}
