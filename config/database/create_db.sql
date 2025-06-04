@@ -1,5 +1,5 @@
     -- This script creates the database tables for the described schema.
-
+    use matcha;
     -- Create the User table
     CREATE TABLE IF NOT EXISTS User (
         id INT AUTO_INCREMENT PRIMARY KEY,
