@@ -2,6 +2,7 @@ import express, { Application } from 'express';
 import { userRoutes } from '@infrastructure/web/routes/userRoutes';
 import errorMiddleware from './middleware/errorMiddleware';
 import cors from 'cors'
+import { authRoutes } from './routes/authRoutes';
 
 export function createApp(): Application {
     const app = express();
@@ -17,6 +18,7 @@ export function createApp(): Application {
 
     // Add routes here
     app.use('/api/v1/user', userRoutes);
+    app.use('/api/v1/auth', authRoutes);
     
     // Add other middleware here
 

@@ -39,3 +39,16 @@ export interface UserVerificationOrForgotPasswordDTO {
 export const UserVerificationOrForgotPasswordSchema : SchemaDefinition  = {
     token: [{type: VALIDATOR.REQUIRED}, {type: VALIDATOR.MIN_LENGTH, arg: 36}, {type: VALIDATOR.MAX_LENGTH, arg: 36}],
 }
+
+export interface LoginUserDTO {
+    email: string;
+    password: string;
+}
+export const LoginUserSchema : SchemaDefinition  = {
+    email: [{type: VALIDATOR.REQUIRED}, {type: VALIDATOR.EMAIL}],
+    password: [{type: VALIDATOR.REQUIRED}, {type: VALIDATOR.PASSWORD}]
+}
+
+export interface JWTTokenResponseDTO {
+    token: string;
+}

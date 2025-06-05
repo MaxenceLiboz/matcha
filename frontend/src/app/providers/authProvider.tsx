@@ -9,7 +9,6 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({ children }) => {
 	const [user, setUser] = useState<User | null>(null);
 	const [isLoading, setIsLoading] = useState(true);
 
-	// Effect to load user from localStorage on initial mount
 	useEffect(() => {
 		try {
 			const storedUser = localStorage.getItem('user');
@@ -22,12 +21,10 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({ children }) => {
 		setIsLoading(false);
 	}, []);
 
-	const login = useCallback((userData: User, token?: string) => {
+	const login = useCallback((userData: User, token: string) => {
 		setUser(userData);
 		localStorage.setItem('user', JSON.stringify(userData));
-		if (token) {
-			localStorage.setItem('authToken', token);
-		}
+		localStorage.setItem('authToken', token);
 	}, []);
 
 	const logout = useCallback(() => {

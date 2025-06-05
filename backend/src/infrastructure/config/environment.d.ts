@@ -9,6 +9,8 @@ declare global {
         PORT?: string;           
         FRONTEND_HOST: string;
         FRONTEND_PORT: string;
+        JWT_SECRET: string;
+        JWT_EXPIRES_IN: number;
       }
     }
   }

@@ -3,11 +3,10 @@ import { CustomError } from "@domain/erros/CustomError";
 import { HTTP_STATUS } from "@domain/erros/HTTP_StatusEnum";
 import { IVerificationRepository } from "@domain/repositories/IVerificationRepository";
 
-export class CreateVerificationUseCase {
+export class VerificationUseCases {
     constructor(private readonly verificationRepository: IVerificationRepository) {}
 
-    async execute(verification: Verification) : Promise<Verification> {
-
+    async createVerification(verification: Verification) : Promise<Verification> {
         if (!verification.user_id || !verification.unique_token || !verification.type || !verification.expiration_date) {
             throw new CustomError('Verification entity can´t be create without all informations', HTTP_STATUS.UNPROCESSABLE_ENTITY);
         }
@@ -23,13 +22,8 @@ export class CreateVerificationUseCase {
 
         return await this.verificationRepository.save(verification);
     }
-}
 
-export class GetValidVerificationByTokenUseCase {
-    constructor(private readonly verificationRepository: IVerificationRepository) {}
-
-    async execute(token: string) : Promise<Verification> {
-
+    async getValidVerificationByToken(token: string) : Promise<Verification> {
         if (!token) {
             throw new CustomError('Token is undefined', HTTP_STATUS.UNPROCESSABLE_ENTITY);
         }
@@ -40,13 +34,8 @@ export class GetValidVerificationByTokenUseCase {
         }
         return verification
     }
-}
 
-export class ExpireVerificationUseCase {
-    constructor(private readonly verificationRepository: IVerificationRepository) {}
-
-    async execute(verification: Verification) : Promise<void> {
-
+    async expireVerification(verification: Verification) : Promise<void> {
         if (!verification.id) {
             throw new CustomError('Can´t exprired verification without its id', HTTP_STATUS.UNPROCESSABLE_ENTITY);
         }

@@ -2,7 +2,8 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { TextField, Button, Box, Typography, Alert, CircularProgress, Link as MuiLink } from '@mui/material';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import { LoginFormValues, useLoginUser } from '../hooks/useLoginUser';
+import { LoginFormValues, useVerifyUser } from '../hooks/useVerifyUser';
+import { useLoginUser } from '../hooks/useLoginUser';
 
 export const LoginForm: React.FC = () => {
   const {
@@ -11,12 +12,13 @@ export const LoginForm: React.FC = () => {
     formState: { errors: formHookErrors },
   } = useForm<LoginFormValues>({});
 
-  const { serverSuccess, serverError } = useLoginUser();
+  const { serverSuccess, verificationError } = useVerifyUser();
+  const { mutation, onSubmit, serverError } = useLoginUser();
 
   return (
     <Box
       component="form"
-    //   onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(onSubmit)}
       sx={{
         display: 'flex',
         flexDirection: 'column',
@@ -39,6 +41,12 @@ export const LoginForm: React.FC = () => {
         </Alert>
       )}
 
+      {verificationError && (
+        <Alert severity="error" sx={{ mt: 1 }}>
+          {verificationError}
+        </Alert>
+      )}
+
       <TextField
         label="Email"
         type="email"
@@ -47,7 +55,7 @@ export const LoginForm: React.FC = () => {
         {...register('email', { required: 'Email is required' })}
         error={!!formHookErrors.email || (!!serverError && (serverError.toLowerCase().includes('email') || serverError.toLowerCase().includes('credentials')))}
         helperText={formHookErrors.email?.message}
-        // disabled={mutation.isPending}
+        disabled={mutation.isPending}
       />
 
       <TextField
@@ -58,7 +66,7 @@ export const LoginForm: React.FC = () => {
         {...register('password', { required: 'Password is required' })}
         error={!!formHookErrors.password || (!!serverError && (serverError.toLowerCase().includes('password') || serverError.toLowerCase().includes('credentials')))}
         helperText={formHookErrors.password?.message}
-        // disabled={mutation.isPending}
+        disabled={mutation.isPending}
       />
 
       {serverError && (
@@ -80,11 +88,10 @@ export const LoginForm: React.FC = () => {
         variant="contained"
         color="primary"
         fullWidth
-        // disabled={mutation.isPending}
+        disabled={mutation.isPending}
         sx={{ mt: 2, py: 1.5 }}
       >
-        {/* {mutation.isPending ? <CircularProgress size={24} color="inherit" /> : 'Login'} */}
-        Login
+        {mutation.isPending ? <CircularProgress size={24} color="inherit" /> : 'Login'}
       </Button>
 
       <Typography variant="body2" textAlign="center" sx={{ mt: 2 }}>
