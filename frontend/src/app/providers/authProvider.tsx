@@ -7,6 +7,7 @@ export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export const AuthProvider: React.FC<{children: ReactNode}> = ({ children }) => {
 	const [user, setUser] = useState<User | null>(null);
+	const [token, setToken] = useState<string | null>(null);
 	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
@@ -23,6 +24,7 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({ children }) => {
 
 	const login = useCallback((userData: User, token: string) => {
 		setUser(userData);
+		setToken(token);
 		localStorage.setItem('user', JSON.stringify(userData));
 		localStorage.setItem('authToken', token);
 	}, []);
@@ -33,7 +35,14 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({ children }) => {
 		localStorage.removeItem('authToken');
 	}, []);
 
-	const isAuthenticated = !!user; // TODO Verify the token is valid and user is set.
+	const isAuthenticated = !!user && !!token;
+
+	useEffect(() => {
+		if (!isAuthenticated) {
+			localStorage.removeItem('user');
+			localStorage.removeItem('authToken');
+		}
+	}, [isAuthenticated])
 
 	return (
 		<AuthContext.Provider value={{ user, isAuthenticated, login, logout, isLoading }}>
