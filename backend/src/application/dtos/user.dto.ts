@@ -46,7 +46,7 @@ export interface LoginUserDTO {
 }
 export const LoginUserSchema : SchemaDefinition  = {
     email: [{type: VALIDATOR.REQUIRED}, {type: VALIDATOR.EMAIL}],
-    password: [{type: VALIDATOR.REQUIRED}, {type: VALIDATOR.PASSWORD}]
+    password: [{type: VALIDATOR.REQUIRED}, {type: VALIDATOR.MAX_LENGTH, arg: 60}]
 }
 
 export interface JWTTokenResponseDTO {
