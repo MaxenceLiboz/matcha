@@ -42,7 +42,8 @@ export class UserMapper {
                 email: domainUser.email,
                 first_name: domainUser.first_name,
                 last_name: domainUser.last_name,
-                username: domainUser.username
+                username: domainUser.username,
+                verified: domainUser.verified ? 1: 0
             };
         } 
     }

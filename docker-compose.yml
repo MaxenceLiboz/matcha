@@ -47,7 +47,9 @@ services:
       - ./frontend:/frontend
     command: /entrypoint.sh
     depends_on:
-      - backend
+      db:
+        condition: service_healthy
+        restart: true
 
 networks:
     db_network:

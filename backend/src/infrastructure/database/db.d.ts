@@ -145,7 +145,7 @@ export interface Verification {
   type: "email_verification" | "password_reset";
   unique_token: string;
   updated_at: Generated<Date>;
-  user_id: number | null;
+  user_id: number;
 }
 
 export interface DB {

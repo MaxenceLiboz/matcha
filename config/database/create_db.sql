@@ -1,5 +1,5 @@
     -- This script creates the database tables for the described schema.
-
+    use matcha;
     -- Create the User table
     CREATE TABLE IF NOT EXISTS User (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -41,7 +41,7 @@
     -- Create the Verification table
     CREATE TABLE IF NOT EXISTS Verification (
         id INT AUTO_INCREMENT PRIMARY KEY,
-        user_id INT,
+        user_id INT NOT NULL,
         FOREIGN KEY (user_id) REFERENCES User(id) ON DELETE CASCADE,
         unique_token VARCHAR(500) UNIQUE NOT NULL,
         expiration_date DATETIME NOT NULL,

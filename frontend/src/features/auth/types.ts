@@ -9,3 +9,17 @@ export interface RegisterUserRequest {
 }
 	
 export type RegisterUserResponse = User;
+
+export interface LoginUserRequest {
+	email: string;
+	password: string;
+}
+
+export interface VerificationOrForgotPasswordRequest {
+	email: string;
+	username: string;
+}
+
+export interface UserVerificationOrForgotPasswordRequest {
+    token: string;
+}

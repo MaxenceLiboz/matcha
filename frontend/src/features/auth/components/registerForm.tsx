@@ -1,8 +1,8 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { TextField, Button, Box, Typography, Alert, CircularProgress } from '@mui/material';
+import { TextField, Button, Box, Typography, Alert, CircularProgress, Link as MuiLink } from '@mui/material';
 import { RegisterFormValues, useRegisterUser } from '../hooks/useRegisterUser';
-
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
 export const RegisterForm: React.FC = () => {
 
@@ -101,6 +101,13 @@ export const RegisterForm: React.FC = () => {
 			>
 				{mutation.isPending ? <CircularProgress size={24} color="inherit" /> : 'Register'}
 			</Button>
+
+			<Typography variant="body2" textAlign="center" sx={{ mt: 1 }}>
+				Do you have an account?{' '}
+				<MuiLink component={RouterLink} to="/login">
+					Login
+				</MuiLink>
+			</Typography>
 		</Box>
 	);
 };
