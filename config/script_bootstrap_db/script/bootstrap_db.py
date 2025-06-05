@@ -28,7 +28,6 @@ try:
     mycursor.execute(f'USE {db_name}')
     mycursor.execute("SHOW TABLES")
 
-
     rows = mycursor.fetchall()
 
     mycursor.execute("SET FOREIGN_KEY_CHECKS = 0")
@@ -53,8 +52,27 @@ try:
         password_hash = fake.unique.password()
 
         val.append((email, username, last_name, first_name, password_hash))
-    
+
     sql = "INSERT INTO User (email, username, last_name, first_name, password_hash) VALUES  (%s, %s, %s, %s, %s)"
+
+    mycursor.executemany(sql, val)
+
+    # FILLING THE PROFILE TABLE
+
+    val.clear()
+    genders = ["Male", "Female", "Other"]
+    sexual_preferences = ["Heterosexual", "Homosexual", "Other"]
+
+    for i in range(500):
+
+        user_id = i + 1
+        age = random.randint(18, 80)
+        gender = random.choice(genders)
+        sexual_preference = random.choice(sexual_preferences)
+
+        val.append((user_id, age, gender, sexual_preference))
+
+    sql = "INSERT INTO Profile (user_id, age, gender, sexual_preference) VALUES  (%d, %d, %s, %s)"
 
     mycursor.executemany(sql, val)
 
