@@ -36,6 +36,6 @@ export const SendUserVerificationOrForgotPasswordSchema : SchemaDefinition  = {
 export interface UserVerificationOrForgotPasswordDTO {
     token: string;
 }
-export const UserVerificationOrForgotPasswordShema : SchemaDefinition  = {
+export const UserVerificationOrForgotPasswordSchema : SchemaDefinition  = {
     token: [{type: VALIDATOR.REQUIRED}, {type: VALIDATOR.MIN_LENGTH, arg: 36}, {type: VALIDATOR.MAX_LENGTH, arg: 36}],
 }

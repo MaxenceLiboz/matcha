@@ -5,7 +5,7 @@ import { CreateUserUseCase, GetUserByUsernameAndEmailUseCase, VerifyUserUseCase 
 import { UserController } from '../controllers/userController';
 import { db } from '@infrastructure/database/database';
 import validationMiddleware from '../middleware/validator/validatorMiddleware';
-import { CreateUserSchema, SendUserVerificationOrForgotPasswordSchema, UserVerificationOrForgotPasswordShema } from '@application/dtos/user.dto';
+import { CreateUserSchema, SendUserVerificationOrForgotPasswordSchema, UserVerificationOrForgotPasswordSchema } from '@application/dtos/user.dto';
 import { VerificationRepository } from '@infrastructure/database/repositories/VerificationRepositoryImpl';
 import { CreateVerificationUseCase, ExpireVerificationUseCase, GetValidVerificationByTokenUseCase } from '@application/use_cases/verificationUseCases';
 import { SendEmailUseCase } from '@application/use_cases/sendEmailUseCase';
@@ -31,4 +31,4 @@ const userController = new UserController(userService);
 
 userRoutes.post('/', validationMiddleware(CreateUserSchema), (req, res, next) => userController.createUser(req, res, next));
 userRoutes.post('/verification', validationMiddleware(SendUserVerificationOrForgotPasswordSchema), (req, res, next) => userController.sendUserVerification(req, res, next));
-userRoutes.post('/verify-user', validationMiddleware(UserVerificationOrForgotPasswordShema), (req, res, next) => userController.verifyUser(req, res, next));
+userRoutes.post('/verify-user', validationMiddleware(UserVerificationOrForgotPasswordSchema), (req, res, next) => userController.verifyUser(req, res, next));

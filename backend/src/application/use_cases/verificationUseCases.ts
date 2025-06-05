@@ -15,8 +15,10 @@ export class CreateVerificationUseCase {
         const old_verifs = await this.verificationRepository.getByUserIdAndType(verification.user_id, verification.type);
 
         old_verifs.forEach(old_verif => {
-            old_verif.expiration_date = new Date(Date.now())
-            this.verificationRepository.save(old_verif);
+            if (old_verif.expiration_date > new Date(Date.now())) {
+                old_verif.expiration_date = new Date(Date.now())
+                this.verificationRepository.save(old_verif);
+            }
         })
 
         return await this.verificationRepository.save(verification);
