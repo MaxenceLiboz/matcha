@@ -1,4 +1,3 @@
-// src/infrastructure/repositories/abstract.repository.impl.ts
 import { Expression, Kysely, RawBuilder, Selectable, sql, SqlBool } from 'kysely';
 import { DB } from '../db';
 import { IAbstractRepository } from '@domain/repositories/IAbstractRepository';
