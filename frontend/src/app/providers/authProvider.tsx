@@ -16,8 +16,13 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({ children }) => {
 			if (storedUser) {
 				setUser(JSON.parse(storedUser));
 			}
+			const storedToken = localStorage.getItem('authToken');
+			if (storedToken) {
+				setToken(storedToken);
+			}
 		} catch (error) {
 			localStorage.removeItem('user');
+			localStorage.removeItem('authToken');
 		}
 		setIsLoading(false);
 	}, []);
@@ -35,14 +40,15 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({ children }) => {
 		localStorage.removeItem('authToken');
 	}, []);
 
+	console.log(user, token);
 	const isAuthenticated = !!user && !!token;
 
 	useEffect(() => {
-		if (!isAuthenticated) {
+		if (!isLoading && !isAuthenticated) {
 			localStorage.removeItem('user');
 			localStorage.removeItem('authToken');
 		}
-	}, [isAuthenticated])
+	}, [isLoading, isAuthenticated])
 
 	return (
 		<AuthContext.Provider value={{ user, isAuthenticated, login, logout, isLoading }}>
