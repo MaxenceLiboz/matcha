@@ -35,8 +35,9 @@ export class AuthService {
             throw new CustomError("Incorrect password", HTTP_STATUS.UNAUTHORIZED);
         }
 
-        const token = await this.authUseCases.createJWTToken(user);
-        return {token: token};
+        const access_token = this.authUseCases.createJWTToken(user);
+        const refresh_token = this.authUseCases.createJWTRefreshToken(user);
+        return {access_token, refresh_token};
     }
 
     async registerUser(data: CreateUserDTO): Promise<void> {
@@ -68,6 +69,10 @@ export class AuthService {
 
         // Expire the current verification
         await this.verificationUseCases.expireVerification(verification);
+    }
+
+    async refreshUserToken(token: string) : Promise<JWTTokenResponseDTO> {
+        return await this.authUseCases.refreshToken(token);
     }
 
     private async sendVerificationEmail(user: UserResponseDTO) {

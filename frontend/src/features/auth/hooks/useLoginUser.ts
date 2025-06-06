@@ -21,11 +21,12 @@ export const useLoginUser = () => {
   const mutation = useMutation<LoginUserResponse, Error, LoginUserRequest>({
 		mutationFn: loginUser,
 		onSuccess: (data: LoginUserResponse) => {
-      const user = jwtDecode<User>(data.token);
-      login(user, data.token)
+      const user = jwtDecode<User>(data.access_token);
+      login(user, data.access_token, data.refresh_token)
 		},
 		onError: (error: any) => {
-			let errorMessage = 'An unexpected error occurred during the verification process.';
+      console.log(error)
+			let errorMessage = 'An unexpected error occurred during the login process.';
 			if (error.response && error.response.data) {
 				const responseData = error.response.data;
 				errorMessage = responseData.error.message

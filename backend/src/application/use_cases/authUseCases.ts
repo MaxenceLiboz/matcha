@@ -4,7 +4,7 @@ import { IUserRepository } from "@domain/repositories/IUserRepository";
 import { config } from "@infrastructure/config";
 import { CreateUserDTO, UserResponseDTO } from "@application/dtos/user.dto";
 import { EmailInUseError, UsernameInUseError } from "@domain/erros/UserErros";
-import jwt from 'jsonwebtoken'
+import jwt, { JwtPayload } from 'jsonwebtoken'
 import bcrypt from 'bcrypt';
 import { UnprocessableEntity } from "@domain/erros/UnprocessableEntity";
 import { CustomError } from "@domain/erros/CustomError";
@@ -62,7 +62,7 @@ export class AuthUseCases {
         await this.userRepository.save(user);
     }
 
-    async createJWTToken(user: User) : Promise<string> {
+    createJWTToken(user: User) : string {
         const payload = {
             id: user.id,
             email: user.email,
@@ -78,5 +78,45 @@ export class AuthUseCases {
         );
 
         return accessToken
+    }
+
+    createJWTRefreshToken(user: User) : string {
+        const payload = {
+            id: user.id,
+        };
+
+        const refreshToken = jwt.sign(
+            payload,
+            config.JWT_REFRESH_SECRET,
+            { expiresIn: config.JWT_REFRESH_EXPIRES_IN }
+        );
+
+        return refreshToken;
+    }
+
+    async refreshToken(token: string) : Promise<{access_token: string, refresh_token: string}> {
+        if (!token) {
+            throw new CustomError("No token provided", HTTP_STATUS.UNAUTHORIZED);
+        }
+
+        try {
+            const decoded = jwt.verify(token, config.JWT_REFRESH_SECRET);
+
+            if (!decoded || typeof decoded === 'string' || !decoded.id) {
+                throw new CustomError("Invalid token", HTTP_STATUS.UNAUTHORIZED);
+            }
+
+            const user = await this.userRepository.getById(decoded.id);
+    
+            if (!user || !user.id) {
+                throw new CustomError("Cannot find user", HTTP_STATUS.NOT_FOUND);
+            }
+    
+            const access_token = this.createJWTToken(user);
+            const refresh_token = this.createJWTRefreshToken(user);
+            return {access_token, refresh_token};
+        } catch (err) {
+            throw new CustomError("Invalid token", HTTP_STATUS.UNAUTHORIZED);
+        }
     }
 }

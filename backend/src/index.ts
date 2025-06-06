@@ -7,7 +7,7 @@ async function startServer() {
     const app = createApp();
 
     app.listen(config.PORT, () => {
-    console.log(`Server is running on http://localhost:${config.PORT}`);
+    console.log(`Server is running on http://${config.HOST}:${config.PORT}`);
     });
 }
 

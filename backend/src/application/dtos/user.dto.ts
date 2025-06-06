@@ -50,5 +50,6 @@ export const LoginUserSchema : SchemaDefinition  = {
 }
 
 export interface JWTTokenResponseDTO {
-    token: string;
+    access_token: string;
+    refresh_token: string;
 }

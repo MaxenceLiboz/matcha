@@ -13,3 +13,5 @@ const userUseCases = new UserUseCases(userRepository);
 
 const userService = new UserService(userUseCases);
 const userController = new UserController(userService);
+
+userRoutes.get('/ping', userController.ping);

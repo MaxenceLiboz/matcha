@@ -3,11 +3,13 @@ import { userRoutes } from '@infrastructure/web/routes/userRoutes';
 import errorMiddleware from './middleware/errorMiddleware';
 import cors from 'cors'
 import { authRoutes } from './routes/authRoutes';
+import { config } from '@infrastructure/config';
+import authMiddleware from './middleware/authMiddleware';
 
 export function createApp(): Application {
     const app = express();
 
-    app.use(cors({credentials: true, origin: 'http://localhost:8000'}))
+    app.use(cors({credentials: true, origin: `http://${config.FRONTEND_HOST}:${config.FRONTEND_PORT}`}))
 
     app.use(express.json());
 
@@ -17,10 +19,8 @@ export function createApp(): Application {
     });
 
     // Add routes here
-    app.use('/api/v1/user', userRoutes);
     app.use('/api/v1/auth', authRoutes);
-    
-    // Add other middleware here
+    app.use('/api/v1/user', authMiddleware, userRoutes);
 
     // Error middleware must be at the end
     app.use(errorMiddleware);

@@ -20,5 +20,7 @@ export default function errorMiddleware(
                 statusCode: error.statusCode
             }
         })
+    } else {
+        next();
     }
 }

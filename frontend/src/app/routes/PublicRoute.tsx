@@ -1,5 +1,3 @@
-// src/app/routes/PublicRoute.tsx (or UnprotectedRoute.tsx)
-
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { Box, CircularProgress } from '@mui/material';

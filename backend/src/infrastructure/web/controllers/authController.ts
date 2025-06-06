@@ -1,7 +1,7 @@
 import { CreateUserDTO, LoginUserDTO, SendUserVerificationOrForgotPasswordDTO, UserVerificationOrForgotPasswordDTO } from "@application/dtos/user.dto";
 import { AuthService } from "@application/services/authSevice";
 import { HTTP_STATUS } from "@domain/erros/HTTP_StatusEnum";
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, response, Response } from "express";
 
 export class AuthController {
     constructor(private authService: AuthService) {}
@@ -28,6 +28,18 @@ export class AuthController {
         const userVerificationDto: UserVerificationOrForgotPasswordDTO = req.body;
         await this.authService.verifyUser(userVerificationDto);
         res.status(HTTP_STATUS.NO_CONTENT).json();
+    }
+
+    async refreshUserToken(req: Request, res: Response, next: NextFunction): Promise<void> {
+        const token = req.headers.authorization?.split(' ')[1];
+
+        if (!token) {
+            res.status(HTTP_STATUS.UNAUTHORIZED).json();
+            return;
+        }
+
+        const jwtTokenResponse = await this.authService.refreshUserToken(token);
+        res.status(HTTP_STATUS.OK).json(jwtTokenResponse);
     }
 
 }

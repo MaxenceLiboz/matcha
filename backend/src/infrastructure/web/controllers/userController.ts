@@ -4,4 +4,8 @@ import { CreateUserDTO, LoginUserDTO, SendUserVerificationOrForgotPasswordDTO, U
 import { HTTP_STATUS } from '@domain/erros/HTTP_StatusEnum';
 export class UserController {
     constructor(private userService: UserService ) {}
+
+    async ping(req: Request, res: Response, next: NextFunction): Promise<void> {
+        res.status(HTTP_STATUS.OK).json();
+    }
 }
