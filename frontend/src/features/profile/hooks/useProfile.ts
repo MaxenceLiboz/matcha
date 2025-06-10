@@ -1,12 +1,6 @@
 import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import {
-  SubmitHandler,
-  useForm,
-  UseFormGetValues,
-  UseFormSetValue,
-  UseFormWatch,
-} from "react-hook-form";
+import { SubmitHandler, useForm, UseFormGetValues, UseFormSetValue, UseFormWatch } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { ProfileFormValues, UpdateProfileResponse } from "../types";
 import { createProfile } from "../profileAPI";
@@ -154,17 +148,18 @@ export const useUpdateProfile = (props: {
 
     const formData = new FormData();
     formData.append("gender", data.gender);
-    formData.append("sexualPreference", data.sexualPreference);
+    formData.append("sexual_preference", data.sexualPreference);
     formData.append("biography", data.biography);
     formData.append("interests", data.interests.join(";"));
+    formData.append('age', data.age.toString());
 
     if (data.profilePicture) {
-      formData.append("profilePicture", data.profilePicture);
+      formData.append("profile_picture", data.profilePicture);
     }
 
     if (data.otherPictures) {
       for (let i = 0; i < data.otherPictures.length; i++) {
-        formData.append("otherPictures", data.otherPictures[i]);
+        formData.append("other_pictures", data.otherPictures[i]);
       }
     }
     mutation.mutate(formData);

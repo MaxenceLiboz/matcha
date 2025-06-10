@@ -4,6 +4,7 @@ export interface ProfileFormValues {
     sexualPreference: 'men' | 'women' | 'both' | 'other' | 'prefer-not-to-say' | '';
     biography: string;
     interests: string[];
+    age: number;
     profilePicture: File | null;
     otherPictures: FileList | null;
 }

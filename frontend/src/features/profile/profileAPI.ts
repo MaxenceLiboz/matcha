@@ -7,11 +7,10 @@ export const createProfile = async (formData: FormData): Promise<UpdateProfileRe
 		  'Content-Type': undefined,
 		},
 	  });
-
 	return response.data;
 };
 
-export const updateProfile = async (formData: FormData): Promise<UpdateProfileResponse> => {
-	const { data } = await apiClient.patch<UpdateProfileResponse>('/profile', formData);
-	return data;
-};
+// export const updateProfile = async (formData: FormData): Promise<UpdateProfileResponse> => {
+// 	const { data } = await apiClient.patch<UpdateProfileResponse>('/profile', formData);
+// 	return data;
+// };

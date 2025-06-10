@@ -34,4 +34,8 @@ export class UserUseCases {
     async getByFileds(fileds: {[filed: string]: any}): Promise<User[]> {
         return await this.userRepository.getByFields(fileds);
     }
+
+    async getById(id: number): Promise<User | null> {
+        return await this.userRepository.getById(id);
+    }
 }

@@ -23,17 +23,18 @@ import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { ProfileFormValues } from "../types";
 import { useUpdateProfile } from "../hooks/useProfile";
+import TextFieldForm from "../../../components/TextFieldForm";
 
 const GENDERS = [
-  { value: "male", label: "Male" },
-  { value: "female", label: "Female" },
-  { value: "other", label: "Other" },
+  { value: "Male", label: "Male" },
+  { value: "Female", label: "Female" },
+  { value: "Other", label: "Other" },
 ];
 
 const SEXUAL_PREFERENCES = [
-  { value: "heterosexual", label: "Heterosexual" },
-  { value: "homosexual", label: "Homosexual" },
-  { value: "other", label: "Other" },
+  { value: "Heterosexual", label: "Heterosexual" },
+  { value: "Homosexual", label: "Homosexual" },
+  { value: "Other", label: "Other" },
 ];
 
 // Predefined common interests (optional, user can add their own)
@@ -88,7 +89,7 @@ export const ProfileForm: React.FC = () => {
     removeProfilePicture,
     handleOtherPicturesChange,
     removeOtherPicture,
-  } = useUpdateProfile({watch, setValue, getValues});
+  } = useUpdateProfile({ watch, setValue, getValues });
 
   return (
     <Box
@@ -123,7 +124,7 @@ export const ProfileForm: React.FC = () => {
       )}
 
       <Grid container justifyContent={"space-between"}>
-        <Grid width={0.49}>
+        <Grid width={0.33}>
           <FormControl fullWidth error={!!errors.gender}>
             <InputLabel id="gender-label">Gender</InputLabel>
             <Controller
@@ -149,7 +150,7 @@ export const ProfileForm: React.FC = () => {
           </FormControl>
         </Grid>
 
-        <Grid width={0.49}>
+        <Grid width={0.33}>
           <FormControl fullWidth error={!!errors.sexualPreference}>
             <InputLabel id="sexual-preference-label">
               Sexual Preference
@@ -179,6 +180,16 @@ export const ProfileForm: React.FC = () => {
               <FormHelperText>{errors.sexualPreference.message}</FormHelperText>
             )}
           </FormControl>
+        </Grid>
+        <Grid width={0.33}>
+          <TextFieldForm
+            name="Age"
+            required={true}
+            register={register}
+            error={errors.age}
+            serverError={serverError}
+            isPending={mutation.isPending}
+          />
         </Grid>
       </Grid>
 
