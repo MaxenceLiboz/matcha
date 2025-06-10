@@ -113,8 +113,7 @@ export class AuthUseCases {
             }
     
             const access_token = this.createJWTToken(user);
-            const refresh_token = this.createJWTRefreshToken(user);
-            return {access_token, refresh_token};
+            return {access_token, refresh_token: token};
         } catch (err) {
             throw new CustomError("Invalid token", HTTP_STATUS.UNAUTHORIZED);
         }

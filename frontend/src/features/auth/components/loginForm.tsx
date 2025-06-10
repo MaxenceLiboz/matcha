@@ -4,14 +4,11 @@ import { TextField, Button, Box, Typography, Alert, CircularProgress, Link as Mu
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { LoginFormValues, useVerifyUser } from '../hooks/useVerifyUser';
 import { useLoginUser } from '../hooks/useLoginUser';
+import TextFieldForm from '../../../components/TextFieldForm';
 
 export const LoginForm: React.FC = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors: formHookErrors },
-  } = useForm<LoginFormValues>({});
 
+  const {register, handleSubmit, formState: { errors: formHookErrors }} = useForm<LoginFormValues>({});
   const { serverSuccess, verificationError } = useVerifyUser();
   const { mutation, onSubmit, serverError } = useLoginUser();
 
@@ -47,27 +44,23 @@ export const LoginForm: React.FC = () => {
         </Alert>
       )}
 
-      <TextField
-        label="Email"
-        type="email"
-        fullWidth
-        required
-        {...register('email', { required: 'Email is required' })}
-        error={!!formHookErrors.email || (!!serverError && (serverError.toLowerCase().includes('email') || serverError.toLowerCase().includes('credentials')))}
-        helperText={formHookErrors.email?.message}
-        disabled={mutation.isPending}
-      />
+      <TextFieldForm 
+				name='Email'
+				required={true}
+				register={register}
+				error={formHookErrors.email}
+				serverError={serverError}
+				isPending={mutation.isPending}
+			/>
 
-      <TextField
-        label="Password"
-        type="password"
-        fullWidth
-        required
-        {...register('password', { required: 'Password is required' })}
-        error={!!formHookErrors.password || (!!serverError && (serverError.toLowerCase().includes('password') || serverError.toLowerCase().includes('credentials')))}
-        helperText={formHookErrors.password?.message}
-        disabled={mutation.isPending}
-      />
+      <TextFieldForm
+				name='Password'
+				required={true}
+				register={register}
+				error={formHookErrors.password}
+				serverError={serverError}
+				isPending={mutation.isPending}
+			/>
 
       {serverError && (
         <Alert severity="error" sx={{ mt: 1 }}>

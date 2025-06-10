@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { TextField, Button, Box, Typography, Alert, CircularProgress, Link as MuiLink } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import { UserVerificationFormValues, useUserVerification } from '../hooks/useUserVerification';
+import TextFieldForm from '../../../components/TextFieldForm';
 
 export const UserVerificationForm: React.FC = () => {
 	const {register, handleSubmit, formState: { errors: formHookErrors },} = useForm<UserVerificationFormValues>({});
@@ -29,27 +30,24 @@ export const UserVerificationForm: React.FC = () => {
 				Send email to verify account
 			</Typography>
 
-			<TextField
-				label="Email"
-				type="email"
-				fullWidth
-				required
-				{...register('email', { required: 'Email is required' })}
-				error={!!formHookErrors.email || (!!serverError && (serverError.toLowerCase().includes('email') || serverError.toLowerCase().includes('credentials')))}
-				helperText={formHookErrors.email?.message}
-				disabled={mutation.isPending}
+			<TextFieldForm 
+				name='Email'
+				required={true}
+				register={register}
+				error={formHookErrors.email}
+				serverError={serverError}
+				isPending={mutation.isPending}
 			/>
 
-			<TextField
-				label="username"
-				type="username"
-				fullWidth
-				required
-				{...register('username', { required: 'username is required' })}
-				error={!!formHookErrors.username || (!!serverError && (serverError.toLowerCase().includes('username') || serverError.toLowerCase().includes('credentials')))}
-				helperText={formHookErrors.username?.message}
-				disabled={mutation.isPending}
+			<TextFieldForm 
+				name='Username'
+				required={true}
+				register={register}
+				error={formHookErrors.username}
+				serverError={serverError}
+				isPending={mutation.isPending}
 			/>
+
 	
 			{serverError && (
 				<Alert severity="error" sx={{ mt: 1 }}>
