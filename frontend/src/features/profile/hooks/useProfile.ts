@@ -1,9 +1,15 @@
 import { useEffect, useState } from "react";
-import { useMutation } from "@tanstack/react-query";
-import { SubmitHandler, useForm, UseFormGetValues, UseFormSetValue, UseFormWatch } from "react-hook-form";
+import { useMutation, useMutationState } from "@tanstack/react-query";
+import {
+  SubmitHandler,
+  useForm,
+  UseFormGetValues,
+  UseFormSetValue,
+  UseFormWatch,
+} from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { ProfileFormValues, UpdateProfileResponse } from "../types";
-import { createProfile } from "../profileAPI";
+import { createProfile, getLocalisation } from "../profileAPI";
 
 export const useUpdateProfile = (props: {
   watch: UseFormWatch<ProfileFormValues>;
@@ -20,9 +26,16 @@ export const useUpdateProfile = (props: {
     null
   );
   const [otherPicsPreview, setOtherPicsPreview] = useState<string[]>([]);
+  const [locationError, setLocationError] = useState<string | null>(null);
+  const [cityName, setCityName] = useState<string | null>(null);
+  const [authorizeLocation, setAuthorizeLocation] = useState<boolean>(false);
 
   const watchedProfilePic = watch("profilePicture");
   const watchedOtherPics = watch("otherPictures");
+
+  useEffect(() => {
+    geolocalisationMutation.mutate();
+  }, []);
 
   useEffect(() => {
     if (watchedProfilePic) {
@@ -123,11 +136,46 @@ export const useUpdateProfile = (props: {
     );
   };
 
+  const handleLocationChange = (isAuthorized: boolean) => {
+    setLocationError(null);
+    setCityName(null);
+    setAuthorizeLocation(isAuthorized);
+    if (isAuthorized) {
+      const city = getValues("city");
+      if (city) {
+        setCityName(city);
+      } else {
+        setLocationError('Couldn\'t load the location');
+      }
+    }
+  };
+
   const mutation = useMutation<UpdateProfileResponse, Error, FormData>({
     mutationFn: createProfile,
     onSuccess: (data) => {
       setServerSuccess(data.message);
       console.log("Profile updated:", data);
+    },
+    onError: (error: any) => {
+      let errorMessage =
+        "An unexpected error occurred while updating your profile.";
+      if (error.response && error.response.data && error.response.data.error) {
+        errorMessage = error.response.data.error.message;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      setServerError(errorMessage);
+      setServerSuccess(null);
+    },
+  });
+
+  const geolocalisationMutation = useMutation({
+    mutationFn: getLocalisation,
+    onSuccess: (data) => {
+      setCityName(data.location.city);
+      setValue("city", data.location.city);
+      setValue("latitude", data.location.latitude);
+      setValue("longitude", data.location.longitude);
     },
     onError: (error: any) => {
       let errorMessage =
@@ -151,7 +199,7 @@ export const useUpdateProfile = (props: {
     formData.append("sexual_preference", data.sexualPreference);
     formData.append("biography", data.biography);
     formData.append("interests", data.interests.join(";"));
-    formData.append('age', data.age.toString());
+    formData.append("age", data.age.toString());
 
     if (data.profilePicture) {
       formData.append("profile_picture", data.profilePicture);
@@ -162,6 +210,13 @@ export const useUpdateProfile = (props: {
         formData.append("other_pictures", data.otherPictures[i]);
       }
     }
+
+    if (data.city && data.latitude && data.longitude) {
+      formData.append("city", data.city);
+      formData.append("latitude", data.latitude.toString());
+      formData.append("longitude", data.longitude.toString());
+    }
+
     mutation.mutate(formData);
   };
 
@@ -180,5 +235,9 @@ export const useUpdateProfile = (props: {
     removeProfilePicture,
     handleOtherPicturesChange,
     removeOtherPicture,
+    handleLocationChange,
+    locationError,
+    cityName,
+    authorizeLocation
   };
 };

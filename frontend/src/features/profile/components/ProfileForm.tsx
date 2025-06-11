@@ -12,11 +12,11 @@ import {
   FormControl,
   InputLabel,
   FormHelperText,
-  Chip,
   Grid,
   IconButton,
-  Input,
-  AlertTitle,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
 } from "@mui/material";
 import { Autocomplete } from "@mui/material";
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
@@ -89,7 +89,12 @@ export const ProfileForm: React.FC = () => {
     removeProfilePicture,
     handleOtherPicturesChange,
     removeOtherPicture,
+    locationError,
+    handleLocationChange,
+    cityName,
+    authorizeLocation,
   } = useUpdateProfile({ watch, setValue, getValues });
+
 
   return (
     <Box
@@ -192,6 +197,40 @@ export const ProfileForm: React.FC = () => {
           />
         </Grid>
       </Grid>
+
+      <Box sx={{ border: "1px dashed grey", p: 2, borderRadius: 1 }}>
+        <Typography variant="subtitle1" gutterBottom>
+          Location
+        </Typography>
+        <FormGroup>
+          <FormControlLabel
+            control={
+              <Controller
+                name="authorizeLocation"
+                control={control}
+                render={({ field }) => (
+                  <Checkbox
+                    {...field}
+                    checked={authorizeLocation}
+                    onChange={(e) => handleLocationChange(e.target.checked)}
+                  />
+                )}
+              />
+            }
+            label="Authorize localization to find matches near you."
+          />
+        </FormGroup>
+        {locationError && (
+          <Alert severity="warning" sx={{ mt: 1 }}>
+            {locationError}
+          </Alert>
+        )}
+        {cityName && authorizeLocation && (
+          <Typography variant="body1" sx={{ mt: 1, ml: 4, fontWeight: "bold" }}>
+            Your City: {cityName}
+          </Typography>
+        )}
+      </Box>
 
       <TextField
         label="Biography"

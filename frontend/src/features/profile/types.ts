@@ -7,6 +7,10 @@ export interface ProfileFormValues {
     age: number;
     profilePicture: File | null;
     otherPictures: FileList | null;
+    authorizeLocation: boolean;
+    latitude?: number;
+    longitude?: number;
+    city?: string;
 }
 
 export interface UpdateProfileRequest extends Omit<ProfileFormValues, 'profilePicture' | 'otherPictures'> {

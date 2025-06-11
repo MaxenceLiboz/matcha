@@ -1,7 +1,6 @@
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { User } from "../types/User";
-import { useAuth } from "../hooks/useAuth";
 
 // Access the single base URL environment variable (Create React App syntax)
 const HOST = process.env.REACT_APP_HOST;
