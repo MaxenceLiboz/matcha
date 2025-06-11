@@ -15,4 +15,13 @@ export class ProfileUseCases {
     );
     return await this.profileRepository.save(profileToCreate);
   }
+
+  async getByUserId(user_id: number): Promise<Profile | null> {
+    const profiles = await this.profileRepository.getByFields({ user_id });
+
+    if (profiles.length > 1 || profiles.length === 0) {
+      return null;
+    }
+    return profiles[0];
+  }
 }

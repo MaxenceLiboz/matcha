@@ -11,7 +11,9 @@ export class PictureUseCases {
 
     let pictures = [];
 
-    for (const file of files) {
+    const allFiles = Object.values(files).flat();
+
+    for (const file of allFiles) {
       // Generate a unique filename and save the file (e.g., to an 'uploads' directory)
       // In a real app, this would be a dedicated File Storage Service (e.g., for S3)
       const uniqueFilename = `${uuidv4()}${path.extname(file.originalname)}`;

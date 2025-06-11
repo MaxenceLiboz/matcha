@@ -3,6 +3,7 @@ export class CustomError extends Error {
     error: unknown;
 
     constructor(message: string, statusCode: number, error? : unknown) {
+        console.log(message);
         super(message);
         this.statusCode = statusCode;
         this.error = error;

@@ -53,6 +53,5 @@ profileRoutes.post(
     requiredFields: ["profile_picture"],
     minTotalFileCount: 1
   }),
-  (req, res, next) => {console.log('HERE')},
   (req, res, next) => profileController.createProfile(req, res, next)
 );

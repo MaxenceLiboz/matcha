@@ -1,4 +1,3 @@
-/// <reference path="../../infrastructure/config/environment.d.ts"/>
 import { User } from "@domain/entities/User";
 import { IUserRepository } from "@domain/repositories/IUserRepository";
 import { config } from "@infrastructure/config";

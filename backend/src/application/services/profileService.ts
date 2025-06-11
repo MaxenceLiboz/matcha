@@ -10,6 +10,8 @@ import { ProfileUseCases } from "@application/use_cases/profileUseCases";
 import { UserUseCases } from "@application/use_cases/userUseCases";
 import { profile } from "console";
 import { PictureUseCases } from "@application/use_cases/pictureUseCases";
+import { CustomError } from "@domain/erros/CustomError";
+import { HTTP_STATUS } from "@domain/erros/HTTP_StatusEnum";
 
 export class ProfileService {
   constructor(
@@ -29,12 +31,17 @@ export class ProfileService {
       throw new Error("User not found");
     }
 
+    const profile = await this.profileUseCases.getByUserId(user_id);
+    if (profile) {
+      throw new CustomError("Profile already exist", HTTP_STATUS.CONFLICT);
+    }
+
     // 2. Create the profile
-    const profile = await this.profileUseCases.save(data, user_id);
+    const new_profile = await this.profileUseCases.save(data, user_id);
 
     // 3. Save all images
     const images = await this.pictureUseCases.save(files, user_id);
 
-    return profile;
+    return new_profile;
   }
 }
