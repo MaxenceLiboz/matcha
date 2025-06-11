@@ -15,6 +15,8 @@ import { ProfileUseCases } from "@application/use_cases/profileUseCases";
 import { UserUseCases } from "@application/use_cases/userUseCases";
 import { PictureUseCases } from "@application/use_cases/pictureUseCases";
 import { UserRepository } from "@infrastructure/database/repositories/UserRepositoryImpl";
+import { LocationRepository } from "@infrastructure/database/repositories/LocationRepositoryImpl";
+import { LocationUseCases } from "@application/use_cases/locationUseCases";
 
 export const profileRoutes = Router();
 
@@ -27,15 +29,18 @@ const upload = multer({ storage: multer.memoryStorage() }).fields([
 const profileRepository = new ProfileRepository(db);
 const pictureRepository = new PictureRepository(db);
 const userRepository = new UserRepository(db);
+const locationRepository = new LocationRepository(db);
 
 const profileUseCases = new ProfileUseCases(profileRepository);
 const userUseCases = new UserUseCases(userRepository);
 const pictureUseCases = new PictureUseCases(pictureRepository);
+const locationUseCases = new LocationUseCases(locationRepository);
 
 const profileService = new ProfileService(
   profileUseCases,
   userUseCases,
-  pictureUseCases
+  pictureUseCases,
+  locationUseCases
 );
 const profileController = new ProfileController(profileService);
 
@@ -51,7 +56,7 @@ profileRoutes.post(
     maxSize: 5 * 1024 * 1024, // 5MB
     allowedMimeTypes: ["image/jpeg", "image/png", "image/webp"],
     requiredFields: ["profile_picture"],
-    minTotalFileCount: 1
+    minTotalFileCount: 1,
   }),
   (req, res, next) => profileController.createProfile(req, res, next)
 );

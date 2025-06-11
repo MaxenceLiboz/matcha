@@ -12,12 +12,14 @@ import { profile } from "console";
 import { PictureUseCases } from "@application/use_cases/pictureUseCases";
 import { CustomError } from "@domain/erros/CustomError";
 import { HTTP_STATUS } from "@domain/erros/HTTP_StatusEnum";
+import { LocationUseCases } from "@application/use_cases/locationUseCases";
 
 export class ProfileService {
   constructor(
     private readonly profileUseCases: ProfileUseCases,
     private readonly userUseCases: UserUseCases,
-    private readonly pictureUseCases: PictureUseCases
+    private readonly pictureUseCases: PictureUseCases,
+    private readonly locationUseCases: LocationUseCases
   ) {}
 
   async createProfile(
@@ -41,6 +43,13 @@ export class ProfileService {
 
     // 3. Save all images
     const images = await this.pictureUseCases.save(files, user_id);
+
+    await this.locationUseCases.save(
+      user.id,
+      parseFloat(data.latitude),
+      parseFloat(data.longitude),
+      data.city
+    );
 
     return new_profile;
   }
