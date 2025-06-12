@@ -4,3 +4,4 @@ package-lock.json
 backend/dist/
 backend/resolution.log
 backend/src/uploads
+project-env

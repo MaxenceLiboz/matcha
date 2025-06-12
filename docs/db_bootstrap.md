@@ -17,11 +17,17 @@ Create a connection with our database in our script, so we can launch mysql comm
 
 [to get more info](https://www.dbvis.com/thetable/truncate-vs-delete-sql-comparison-of-the-two-statements/)
 
+# RandomUser Library
+
+## Utility
+
+We're gonna use the RandomUser library in order to get fake users with data and pictures associate from the RandomUser API.
+
 # Faker Library
 
 ## Utility
 
-We're gonna use the Faker library in python in order to create 500 Users in our python script.
+We're gonna use the Faker library in python in order to create fake locations and tags for our fake users.
 
 ## Version 
 
