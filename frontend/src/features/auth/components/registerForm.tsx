@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { TextField, Button, Box, Typography, Alert, CircularProgress, Link as MuiLink } from '@mui/material';
 import { RegisterFormValues, useRegisterUser } from '../hooks/useRegisterUser';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import TextFieldForm from '../../../components/TextFieldForm';
 
 export const RegisterForm: React.FC = () => {
 
@@ -30,59 +31,49 @@ export const RegisterForm: React.FC = () => {
 				Create Account
 			</Typography>
 
-			<TextField
-				label="Email"
-				type="email"
-				fullWidth
-				required
-				{...register('email', { required: "Email is required" })} 
-				error={!!formHookErrors.email || (!!serverError && serverError.toLowerCase().includes('email'))}
-				helperText={formHookErrors.email?.message}
-				disabled={mutation.isPending}
+			<TextFieldForm 
+				name='Email'
+				required={true}
+				register={register}
+				error={formHookErrors.email}
+				serverError={serverError}
+				isPending={mutation.isPending}
 			/>
 
-			<TextField
-				label="Username"
-				type="text"
-				fullWidth
-				required
-				{...register('username', { required: "Username is required" })}
-				error={!!formHookErrors.username || (!!serverError && serverError.toLowerCase().includes('username'))}
-				helperText={formHookErrors.username?.message}
-				disabled={mutation.isPending}
+			<TextFieldForm
+				name='Username'
+				required={true}
+				register={register}
+				error={formHookErrors.username}
+				serverError={serverError}
+				isPending={mutation.isPending}
 			/>
 
-			<TextField
-				label="First Name"
-				type="text"
-				fullWidth
-				required
-				{...register('first_name', { required: "First name is required" })}
-				error={!!formHookErrors.first_name}
-				helperText={formHookErrors.first_name?.message}
-				disabled={mutation.isPending}
+			<TextFieldForm
+				name='First name'
+				required={true}
+				register={register}
+				error={formHookErrors.first_name}
+				serverError={serverError}
+				isPending={mutation.isPending}
 			/>
 
-			<TextField
-				label="Last Name"
-				type="text"
-				fullWidth
-				required
-				{...register('last_name', { required: "Last name is required" })}
-				error={!!formHookErrors.last_name}
-				helperText={formHookErrors.last_name?.message}
-				disabled={mutation.isPending}
+			<TextFieldForm
+				name='Last name'
+				required={true}
+				register={register}
+				error={formHookErrors.last_name}
+				serverError={serverError}
+				isPending={mutation.isPending}
 			/>
 
-			<TextField
-				label="Password"
-				type="password"
-				fullWidth
-				required
-				{...register('password', { required: "Password is required" })}
-				error={!!formHookErrors.password || (!!serverError && serverError.toLowerCase().includes('password'))}
-				helperText={formHookErrors.password?.message}
-				disabled={mutation.isPending}
+			<TextFieldForm
+				name='Password'
+				required={true}
+				register={register}
+				error={formHookErrors.password}
+				serverError={serverError}
+				isPending={mutation.isPending}
 			/>
 
 			{serverError && (

@@ -8,7 +8,9 @@ export enum VALIDATOR {
     MAX = 'max',
     MIN = 'min',
     EMAIL = 'email',
-    PASSWORD = 'password'
+    PASSWORD = 'password',
+    IS_NUMBER = 'isNumber',
+    IS_IN = 'isIn',
 }
 
 interface BaseRule {
@@ -24,6 +26,7 @@ export interface RuleWithArg<TArg> extends BaseRule {
 export type ValidationRule =
     | BaseRule 
     | RuleWithArg<number>
+    | RuleWithArg<string[]>
     ;
 
 export type SchemaDefinition = {
@@ -102,6 +105,20 @@ export const validatorDictionary : ValidatorDictionaryType = {
 
         if (typeof value !== 'string' || !passwordRegex.test(value)) {
             return `${fieldName} policy not matched, at least 8 chars and at most 50 with 1 upper, 1 lower, 1 special and 1 digit.`
+        }
+        return true;
+    },
+
+    [VALIDATOR.IS_IN]: (value: string, fieldName: string, arg: string[]) => {
+        if (typeof value === 'string' && !arg.includes(value)) {
+            return `${fieldName} must be one of ${arg.join(', ')}.`;
+        }
+        return true;
+    },
+
+    [VALIDATOR.IS_NUMBER]: (value: any, fieldName: string) => {
+        if (value !== undefined && isNaN(parseInt(value))) {
+            return `${fieldName} must be a number.`;
         }
         return true;
     }

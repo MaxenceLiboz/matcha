@@ -9,6 +9,7 @@ export class User extends AbstractEntity {
     public last_name: string;
     public username: string;
     public verified: boolean;
+    public password_hash?: string;
 
     // Private constructor to enforce factory method usage for creation/hydration
     private constructor(
@@ -19,7 +20,8 @@ export class User extends AbstractEntity {
         verified?: boolean,
         id?: number,
         created_at?: Date,
-        updated_at?: Date
+        updated_at?: Date,
+        password_hash?: string
     ) {
         super(id, created_at, updated_at);
         this.email = email;
@@ -27,6 +29,7 @@ export class User extends AbstractEntity {
         this.last_name = last_name;
         this.username = username;
         this.verified = verified || false;
+        this.password_hash = password_hash;
     }
 
     // Factory for creating a NEW user instance (before DB persistence)
@@ -55,7 +58,8 @@ export class User extends AbstractEntity {
         verified: boolean,
         created_at: Date,
         updated_at: Date,
+        password_hash?: string
     ): User {
-        return new User(email, first_name, last_name, username, verified, id, created_at, updated_at);
+        return new User(email, first_name, last_name, username, verified, id, created_at, updated_at, password_hash);
     }
 }

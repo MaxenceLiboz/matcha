@@ -1,5 +1,4 @@
-// src/infrastructure/repositories/abstract.repository.impl.ts
-import { Kysely, Selectable, sql } from 'kysely';
+import { Expression, Kysely, RawBuilder, Selectable, sql, SqlBool } from 'kysely';
 import { DB } from '../db';
 import { IAbstractRepository } from '@domain/repositories/IAbstractRepository';
 import { CustomError } from '@domain/erros/CustomError';
@@ -32,7 +31,7 @@ export abstract class AbstractRepositoryImpl<
         if (id === null || id === undefined) {
             throw new CustomError('ID must not be null or undefined.', HTTP_STATUS.BAD_REQUEST);
         }
-
+        
         const { rows: results } = await sql<Selectable<DB[TTableName]>>`SELECT * FROM ${sql.table(this.tableName)} WHERE id = ${id}`.execute(this.db);
 
         if (!results || results.length > 1) {
@@ -40,6 +39,32 @@ export abstract class AbstractRepositoryImpl<
         }
 
         return this.mapper.toDomain(results[0]);
+    }
+
+    async getByFields(fields: {[filedName: string]: any}): Promise<TDomain[]> {
+        
+        let finalQuery: RawBuilder<Selectable<DB[TTableName]>>;
+
+        if (Object.keys(fields).length > 0) {
+            const conditions = Object.entries(fields).map(([key, value]) => {
+                return sql<Selectable<DB[TTableName]>>`${sql.ref(key)} = ${value}`;
+            });
+
+            finalQuery = sql<Selectable<DB[TTableName]>>`SELECT * FROM ${sql.table(this.tableName)} WHERE ${sql.join(conditions, sql<Selectable<DB[TTableName]>>` AND `)}`;
+        } else {
+            finalQuery = sql<Selectable<DB[TTableName]>>`SELECT * FROM ${sql.table(this.tableName)}`;
+        }
+
+        // Execute the fully constructed raw SQL query
+        const { rows } = await finalQuery.execute(this.db);
+
+
+        let domains = [];
+        
+        for (const result of rows) {
+            domains.push(this.mapper.toDomain(result));
+        }
+        return domains;
     }
 
 }

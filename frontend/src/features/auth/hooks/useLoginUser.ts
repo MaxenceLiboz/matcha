@@ -1,27 +1,32 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { LoginUserRequest, UserVerificationOrForgotPasswordRequest } from "../types";
+import { LoginUserRequest, LoginUserResponse, UserVerificationOrForgotPasswordRequest } from "../types";
 import { useMutation } from "@tanstack/react-query";
-import { verifyUser } from "../authAPI";
+import { loginUser, verifyUser } from "../authAPI";
+import { SubmitHandler } from "react-hook-form";
+import { jwtDecode } from "jwt-decode";
+import { useAuth } from "../../../hooks/useAuth";
+import { User } from "../../../types/User";
 
 export type LoginFormValues = LoginUserRequest;
 
 export const useLoginUser = () => {
   const navigate = useNavigate();
   const [serverError, setServerError] = useState<string | null>(null);
-  const [serverSuccess, setServerSuccess] = useState<string | null>(null);
-  const [token, setToken] = useState<string | null>(null);
 
   // Get the token to validate the user.
   const location = useLocation();
+  const { login, isAuthenticated, isLoading } = useAuth()
 
-  const mutation = useMutation<void, Error, UserVerificationOrForgotPasswordRequest>({
-		mutationFn: verifyUser,
-		onSuccess: (data: void) => {
-			setServerSuccess("You have been verified, you can login now")
+  const mutation = useMutation<LoginUserResponse, Error, LoginUserRequest>({
+		mutationFn: loginUser,
+		onSuccess: (data: LoginUserResponse) => {
+      const user = jwtDecode<User>(data.access_token);
+      login(user, data.access_token, data.refresh_token)
 		},
 		onError: (error: any) => {
-			let errorMessage = 'An unexpected error occurred during the verification process.';
+      console.log(error)
+			let errorMessage = 'An unexpected error occurred during the login process.';
 			if (error.response && error.response.data) {
 				const responseData = error.response.data;
 				errorMessage = responseData.error.message
@@ -30,19 +35,10 @@ export const useLoginUser = () => {
 		},
 	});
 
-  useEffect(() => {
-    const queryParams = new URLSearchParams(location.search);
-    setToken(queryParams.get('j'));
-  }, [location]);
+  const onSubmit: SubmitHandler<LoginFormValues> = (data) => {
+    setServerError(null);
+    mutation.mutate(data);
+  };
 
-  useEffect(() => {
-    if (token) {
-      console.log(token);
-      mutation.mutate({token});
-      navigate("/login");
-    }
-  }, [token])
-  
-
-  return {serverSuccess, serverError };
+  return {mutation, onSubmit, serverError };
 };

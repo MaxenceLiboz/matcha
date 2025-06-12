@@ -18,10 +18,10 @@
         id INT AUTO_INCREMENT PRIMARY KEY,
         user_id INT UNIQUE NOT NULL,
         FOREIGN KEY (user_id) REFERENCES User(id) ON DELETE CASCADE,
-        age INT,
-        gender ENUM('Male', 'Female', 'Other'),
-        sexual_preference ENUM('Heterosexual', 'Homosexual', 'Other'),
-        frame_rating INT,
+        age INT NOT NULL,
+        gender ENUM('Male', 'Female', 'Other') NOT NULL,
+        sexual_preference ENUM('Heterosexual', 'Homosexual', 'Other') NOT NULL,
+        fame_rating INT NOT NULL DEFAULT 0,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL
     );
@@ -75,7 +75,7 @@
         user_id INT NOT NULL,
         FOREIGN KEY (user_id) REFERENCES User(id) ON DELETE CASCADE,
         ref VARCHAR(500) NOT NULL,
-        mime_type VARCHAR(50),
+        mime_type VARCHAR(50) NOT NULL,
         is_profile BOOLEAN DEFAULT FALSE,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL

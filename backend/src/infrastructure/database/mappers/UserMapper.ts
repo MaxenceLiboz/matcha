@@ -13,7 +13,8 @@ export class UserMapper {
             db_record.username,
             db_record.verified === 1,
             db_record.created_at,
-            db_record.updated_at
+            db_record.updated_at,
+            db_record.password_hash
         );
     }
 

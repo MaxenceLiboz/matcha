@@ -1,4 +1,3 @@
-// src/app/providers/AuthProvider.tsx
 import React, { createContext, useState, ReactNode, useCallback, useEffect } from 'react';
 import { User } from '../../types/User';
 import { AuthContextType } from '../../types/AuthContext';
@@ -8,8 +7,8 @@ export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 export const AuthProvider: React.FC<{children: ReactNode}> = ({ children }) => {
 	const [user, setUser] = useState<User | null>(null);
 	const [isLoading, setIsLoading] = useState(true);
+	const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-	// Effect to load user from localStorage on initial mount
 	useEffect(() => {
 		try {
 			const storedUser = localStorage.getItem('user');
@@ -22,12 +21,12 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({ children }) => {
 		setIsLoading(false);
 	}, []);
 
-	const login = useCallback((userData: User, token?: string) => {
+	const login = useCallback((userData: User, access_token: string, refresh_token: string) => {
+		console.log("Login successful");
 		setUser(userData);
 		localStorage.setItem('user', JSON.stringify(userData));
-		if (token) {
-			localStorage.setItem('authToken', token);
-		}
+		localStorage.setItem('authToken', access_token);
+		localStorage.setItem('refreshToken', refresh_token);
 	}, []);
 
 	const logout = useCallback(() => {
@@ -36,7 +35,11 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({ children }) => {
 		localStorage.removeItem('authToken');
 	}, []);
 
-	const isAuthenticated = !!user; // TODO Verify the token is valid and user is set.
+	
+	useEffect(() => {
+		const access_token = localStorage.getItem('authToken');
+		setIsAuthenticated(!!user && !!access_token);
+	}, [user])
 
 	return (
 		<AuthContext.Provider value={{ user, isAuthenticated, login, logout, isLoading }}>

@@ -67,19 +67,19 @@ export interface Picture {
   created_at: Generated<Date>;
   id: Generated<number>;
   is_profile: Generated<number | null>;
-  mime_type: string | null;
+  mime_type: string;
   ref: string;
   updated_at: Generated<Date>;
   user_id: number;
 }
 
 export interface Profile {
-  age: number | null;
+  age: number;
   created_at: Generated<Date>;
-  frame_rating: number | null;
-  gender: "Female" | "Male" | "Other" | null;
+  fame_rating: Generated<number>;
+  gender: "Female" | "Male" | "Other";
   id: Generated<number>;
-  sexual_preference: "Heterosexual" | "Homosexual" | "Other" | null;
+  sexual_preference: "Heterosexual" | "Homosexual" | "Other";
   updated_at: Generated<Date>;
   user_id: number;
 }

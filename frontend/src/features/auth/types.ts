@@ -15,6 +15,11 @@ export interface LoginUserRequest {
 	password: string;
 }
 
+export interface LoginUserResponse {
+	access_token: string;
+	refresh_token: string;
+}
+
 export interface VerificationOrForgotPasswordRequest {
 	email: string;
 	username: string;
