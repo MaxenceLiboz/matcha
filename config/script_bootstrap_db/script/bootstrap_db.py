@@ -45,7 +45,7 @@ def generate_requests_data(user_list, is_french=False, latitude='', longitude=''
         email = user.get_email()
         username = user.get_username()
 
-        if email in email_list or username in username_list:
+        while email in email_list or username in username_list:
             email = fake.unique.email()
             username = fake.unique.user_name()
 
@@ -54,7 +54,7 @@ def generate_requests_data(user_list, is_french=False, latitude='', longitude=''
         email_list.append(email)
         username_list.append(username)
 
-        val_user.append((email, username, last_name, first_name, hash_pw))
+        val_user.append((email, username, last_name, first_name, hash_pw, 1))
 
         # PROFILE TABLE
         age = user.get_age()
@@ -154,7 +154,7 @@ try:
 
     # FILLING TABLES
 
-    sql_user = "INSERT INTO User (email, username, last_name, first_name, password_hash) VALUES  (%s, %s, %s, %s, %s)"
+    sql_user = "INSERT INTO User (email, username, last_name, first_name, password_hash, verified) VALUES  (%s, %s, %s, %s, %s, %s)"
     sql_profile = "INSERT INTO Profile (user_id, age, gender, sexual_preference, fame_rating, created_at, updated_at) VALUES  (%s, %s, %s, %s, %s, %s, %s)"
     sql_picture = "INSERT INTO Picture (user_id, ref, mime_type, is_profile, created_at, updated_at) VALUES (%s, %s, %s, %s, %s, %s)"
     sql_location = "INSERT INTO Location (user_id, latitude, longitude, city, created_at, updated_at) VALUES (%s, %s, %s, %s, %s, %s)"
