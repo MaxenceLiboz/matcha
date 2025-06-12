@@ -21,7 +21,7 @@
         age INT NOT NULL,
         gender ENUM('Male', 'Female', 'Other') NOT NULL,
         sexual_preference ENUM('Heterosexual', 'Homosexual', 'Other') NOT NULL,
-        frame_rating INT NOT NULL DEFAULT 0,
+        fame_rating INT NOT NULL DEFAULT 0,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL
     );

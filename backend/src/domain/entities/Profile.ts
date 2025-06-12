@@ -10,14 +10,14 @@ export class Profile extends AbstractEntity {
   public age: number;
   public gender: Gender;
   public sexual_preference: SexualPreference;
-  public frame_rating: number;
+  public fame_rating: number;
 
   private constructor(
     user_id: number,
     age: number,
     gender: Gender,
     sexual_preference: SexualPreference,
-    frame_rating: number,
+    fame_rating: number,
     id?: number,
     created_at?: Date,
     updated_at?: Date
@@ -27,7 +27,7 @@ export class Profile extends AbstractEntity {
     this.age = age;
     this.gender = gender;
     this.sexual_preference = sexual_preference;
-    this.frame_rating = frame_rating;
+    this.fame_rating = fame_rating;
   }
 
   // Factory for creating a NEW profile instance
@@ -36,30 +36,30 @@ export class Profile extends AbstractEntity {
     age: number,
     gender: Gender,
     sexual_preference: SexualPreference,
-    frame_rating: number
+    fame_rating: number
   ): Profile {
     if (
       !user_id ||
       age === undefined ||
       !gender ||
       !sexual_preference ||
-      frame_rating === undefined
+      fame_rating === undefined
     ) {
       throw new CustomError(
-        `All fields are required [user_id: ${user_id}, age: ${age}, gender: ${gender}, sexual_preference: ${sexual_preference}, frame_rating: ${frame_rating}]`,
+        `All fields are required [user_id: ${user_id}, age: ${age}, gender: ${gender}, sexual_preference: ${sexual_preference}, fame_rating: ${fame_rating}]`,
         HTTP_STATUS.BAD_REQUEST
       );
     }
 
-    // Validate frame_rating is a positive integer (>= 0)
-    if (frame_rating < 0 || !Number.isInteger(frame_rating)) {
+    // Validate fame_rating is a positive integer (>= 0)
+    if (fame_rating < 0 || !Number.isInteger(fame_rating)) {
       throw new CustomError(
-        `Frame rating must be a positive integer (>= 0) [frame_rating: ${frame_rating}]`,
+        `Frame rating must be a positive integer (>= 0) [fame_rating: ${fame_rating}]`,
         HTTP_STATUS.BAD_REQUEST
       );
     }
 
-    return new Profile(user_id, age, gender, sexual_preference, frame_rating);
+    return new Profile(user_id, age, gender, sexual_preference, fame_rating);
   }
 
   // Factory for hydrating a db profile instance
@@ -69,7 +69,7 @@ export class Profile extends AbstractEntity {
     age: number,
     gender: Gender,
     sexual_preference: SexualPreference,
-    frame_rating: number,
+    fame_rating: number,
     created_at: Date,
     updated_at: Date
   ): Profile {
@@ -78,7 +78,7 @@ export class Profile extends AbstractEntity {
       age,
       gender,
       sexual_preference,
-      frame_rating,
+      fame_rating,
       id,
       created_at,
       updated_at
@@ -90,12 +90,12 @@ export class Profile extends AbstractEntity {
     age: number,
     gender: Gender,
     sexual_preference: SexualPreference,
-    frame_rating: number
+    fame_rating: number
   ): void {
-    // Validate frame_rating
-    if (frame_rating < 0 || !Number.isInteger(frame_rating)) {
+    // Validate fame_rating
+    if (fame_rating < 0 || !Number.isInteger(fame_rating)) {
       throw new CustomError(
-        `Frame rating must be a positive integer (>= 0) [frame_rating: ${frame_rating}]`,
+        `Frame rating must be a positive integer (>= 0) [fame_rating: ${fame_rating}]`,
         HTTP_STATUS.BAD_REQUEST
       );
     }
@@ -103,6 +103,6 @@ export class Profile extends AbstractEntity {
     this.age = age;
     this.gender = gender;
     this.sexual_preference = sexual_preference;
-    this.frame_rating = frame_rating;
+    this.fame_rating = fame_rating;
   }
 }

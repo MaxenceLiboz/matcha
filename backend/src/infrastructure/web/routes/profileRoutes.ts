@@ -17,6 +17,8 @@ import { PictureUseCases } from "@application/use_cases/pictureUseCases";
 import { UserRepository } from "@infrastructure/database/repositories/UserRepositoryImpl";
 import { LocationRepository } from "@infrastructure/database/repositories/LocationRepositoryImpl";
 import { LocationUseCases } from "@application/use_cases/locationUseCases";
+import { TagRepository } from "@infrastructure/database/repositories/TagReposiotryImpl";
+import { TagUseCases } from "@application/use_cases/tagUseCases";
 
 export const profileRoutes = Router();
 
@@ -30,17 +32,20 @@ const profileRepository = new ProfileRepository(db);
 const pictureRepository = new PictureRepository(db);
 const userRepository = new UserRepository(db);
 const locationRepository = new LocationRepository(db);
+const tagRepository = new TagRepository(db);
 
 const profileUseCases = new ProfileUseCases(profileRepository);
 const userUseCases = new UserUseCases(userRepository);
 const pictureUseCases = new PictureUseCases(pictureRepository);
 const locationUseCases = new LocationUseCases(locationRepository);
+const tagUseCases = new TagUseCases(tagRepository);
 
 const profileService = new ProfileService(
   profileUseCases,
   userUseCases,
   pictureUseCases,
-  locationUseCases
+  locationUseCases,
+  tagUseCases
 );
 const profileController = new ProfileController(profileService);
 

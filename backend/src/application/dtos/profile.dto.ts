@@ -4,6 +4,7 @@ export interface CreateProfileDTO {
     age: number;
     gender: "Male" | "Female" | "Other";
     sexual_preference: "Heterosexual" | "Homosexual" | "Other";
+    interests: string;
     city: string;
     latitude: string; 
     longitude: string;
@@ -26,5 +27,10 @@ export const CreateProfileSchema: SchemaDefinition = {
         { type: VALIDATOR.REQUIRED },
         { type: VALIDATOR.MIN_LENGTH, arg: 1 },
         { type: VALIDATOR.MAX_LENGTH, arg: 50 }
+    ],
+    interests: [
+        { type: VALIDATOR.REQUIRED },
+        { type: VALIDATOR.MIN_LENGTH, arg: 1 },
+        { type: VALIDATOR.MAX_LENGTH, arg: 1000 }
     ]
 };

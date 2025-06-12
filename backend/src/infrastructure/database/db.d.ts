@@ -76,7 +76,7 @@ export interface Picture {
 export interface Profile {
   age: number;
   created_at: Generated<Date>;
-  frame_rating: Generated<number>;
+  fame_rating: Generated<number>;
   gender: "Female" | "Male" | "Other";
   id: Generated<number>;
   sexual_preference: "Heterosexual" | "Homosexual" | "Other";
