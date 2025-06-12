@@ -16,7 +16,7 @@ email_list = []
 username_list = []
 user_id = 1
 
-def generate_requests_data(user_list):
+def generate_requests_data(user_list, is_french=False, latitude='', longitude='', city=''):
 
     global val_user 
     global val_profile
@@ -60,10 +60,10 @@ def generate_requests_data(user_list):
         age = user.get_age()
         gender = user.get_gender()
         sexual_preference = random.choice(sexual_preferences)
-        frame_rating = random.randint(1, 10)
+        fame_rating = random.randint(1, 10)
         current_timestamp = time.strftime(f, now)
 
-        val_profile.append((user_id, age, gender, sexual_preference, frame_rating, current_timestamp, current_timestamp))
+        val_profile.append((user_id, age, gender, sexual_preference, fame_rating, current_timestamp, current_timestamp))
 
         # PICTURE TABLE
         picture_path = user.get_picture()
@@ -71,10 +71,11 @@ def generate_requests_data(user_list):
         val_picture.append((user_id, picture_path, 'jpg', 1, current_timestamp, current_timestamp))
 
         # LOCATION TABLE
-        location = fake.location_on_land()
-        latitude = location[0]
-        longitude = location[1]
-        city = location[2]
+        if is_french == False:
+            location = fake.location_on_land()
+            latitude = location[0]
+            longitude = location[1]
+            city = location[2]
 
         val_location.append((user_id, latitude, longitude, city, current_timestamp, current_timestamp))
 
@@ -138,18 +139,23 @@ try:
 
     fake = Faker()
 
-    user_list = RandomUser.generate_users(500, get_params={'exc': 'location'})
-
+    user_list = RandomUser.generate_users(400, get_params={'exc': 'location'})
     generate_requests_data(user_list)
 
-    user_list = RandomUser.generate_users(100, get_params={'nat': 'fr'})
+    user_list = RandomUser.generate_users(50, get_params={'exc': 'location', 'nat': 'fr'})
+    latitude_Paris = 48.866667
+    longitude_Paris = 2.333333 
+    generate_requests_data(user_list, True, latitude_Paris, longitude_Paris, 'Paris')
 
-    generate_requests_data(user_list)
+    user_list = RandomUser.generate_users(50, get_params={'exc': 'location', 'nat': 'fr'})
+    latitude_Lyon = 45.750000
+    longitude_Lyon = 4.850000
+    generate_requests_data(user_list, True, latitude_Lyon, longitude_Lyon, 'Lyon')
 
     # FILLING TABLES
 
     sql_user = "INSERT INTO User (email, username, last_name, first_name, password_hash) VALUES  (%s, %s, %s, %s, %s)"
-    sql_profile = "INSERT INTO Profile (user_id, age, gender, sexual_preference, frame_rating, created_at, updated_at) VALUES  (%s, %s, %s, %s, %s, %s, %s)"
+    sql_profile = "INSERT INTO Profile (user_id, age, gender, sexual_preference, fame_rating, created_at, updated_at) VALUES  (%s, %s, %s, %s, %s, %s, %s)"
     sql_picture = "INSERT INTO Picture (user_id, ref, mime_type, is_profile, created_at, updated_at) VALUES (%s, %s, %s, %s, %s, %s)"
     sql_location = "INSERT INTO Location (user_id, latitude, longitude, city, created_at, updated_at) VALUES (%s, %s, %s, %s, %s, %s)"
     sql_tag = "INSERT INTO Tag (name, created_at, updated_at) VALUES (%s, %s, %s)"
