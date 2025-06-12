@@ -13,27 +13,31 @@ export const useUserVerification = () => {
   const navigate = useNavigate();
   const [serverError, setServerError] = useState<string | null>(null);
 
-  const mutation = useMutation<void, Error, VerificationOrForgotPasswordRequest>({
-		mutationFn: userVerification,
-		onSuccess: (data: void) => {
-			alert('Email to verify yourself have been sent')
-			navigate('/login');
-		},
-		onError: (error: any) => {
-			let errorMessage = 'An unexpected error occurred during registration.';
-			if (error.response && error.response.data) {
-				const responseData = error.response.data;
-				errorMessage = responseData.error.message
-			}
-      console.log(errorMessage)
-			setServerError(errorMessage);
-		},
-	});
+  const mutation = useMutation<
+    void,
+    Error,
+    VerificationOrForgotPasswordRequest
+  >({
+    mutationFn: userVerification,
+    onSuccess: (data: void) => {
+      alert("Email to verify yourself have been sent");
+      navigate("/login");
+    },
+    onError: (error: any) => {
+      let errorMessage = "An unexpected error occurred during registration.";
+      if (error.response && error.response.data) {
+        const responseData = error.response.data;
+        errorMessage = responseData.error.message;
+      }
+      console.log(errorMessage);
+      setServerError(errorMessage);
+    },
+  });
 
   const onSubmit: SubmitHandler<UserVerificationFormValues> = (data) => {
-      setServerError(null);
-      mutation.mutate(data);
+    setServerError(null);
+    mutation.mutate(data);
   };
 
-  return {mutation, onSubmit, serverError};
+  return { mutation, onSubmit, serverError };
 };

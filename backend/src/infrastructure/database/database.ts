@@ -1,7 +1,7 @@
-import { DB } from './db'
-import { createPool } from 'mysql2'
-import { Kysely, MysqlDialect } from 'kysely'
-import { config } from '@infrastructure/config'
+import { DB } from "./db";
+import { createPool } from "mysql2";
+import { Kysely, MysqlDialect } from "kysely";
+import { config } from "@infrastructure/config";
 
 const dialect = new MysqlDialect({
   pool: createPool({
@@ -11,9 +11,9 @@ const dialect = new MysqlDialect({
     user: config.MYSQL_USER,
     password: config.MYSQL_PASSWORD,
     connectionLimit: 10,
-  })
-})
+  }),
+});
 
 export const db = new Kysely<DB>({
   dialect,
-})
+});

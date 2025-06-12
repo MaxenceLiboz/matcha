@@ -1,7 +1,7 @@
-import React from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
-import { Box, CircularProgress } from '@mui/material';
-import { useAuth } from '../../hooks/useAuth';
+import React from "react";
+import { Navigate, useLocation } from "react-router-dom";
+import { Box, CircularProgress } from "@mui/material";
+import { useAuth } from "../../hooks/useAuth";
 
 interface ProtectedRouteProps {
   element: React.ReactElement;
@@ -15,10 +15,10 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ element }) => {
     return (
       <Box
         sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          minHeight: '100vh',
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "100vh",
         }}
       >
         <CircularProgress />

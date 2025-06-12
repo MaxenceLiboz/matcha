@@ -16,7 +16,7 @@ export class ProfileRepository
     super(
       db,
       "Profile",
-      ProfileMapper as IMapper<Selectable<ProfileTable>, Profile>
+      ProfileMapper as IMapper<Selectable<ProfileTable>, Profile>,
     );
   }
 
@@ -37,7 +37,7 @@ export class ProfileRepository
       if (!updatedProfile) {
         throw new CustomError(
           "Error fetching the updated profile.",
-          HTTP_STATUS.UNPROCESSABLE_ENTITY
+          HTTP_STATUS.UNPROCESSABLE_ENTITY,
         );
       }
       return updatedProfile;
@@ -60,7 +60,7 @@ export class ProfileRepository
       if (!newProfile) {
         throw new CustomError(
           "Error fetching the newly created profile.",
-          HTTP_STATUS.UNPROCESSABLE_ENTITY
+          HTTP_STATUS.UNPROCESSABLE_ENTITY,
         );
       }
       return newProfile;

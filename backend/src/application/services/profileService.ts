@@ -1,14 +1,7 @@
 import { Profile } from "@domain/entities/Profile";
 import { CreateProfileDTO } from "../dtos/profile.dto";
-import { IProfileRepository } from "@domain/repositories/IProfileRepository";
-import { IPictureRepository } from "@domain/repositories/IPictureRepository";
-import { Picture } from "@domain/entities/Picture";
-import { v4 as uuidv4 } from "uuid";
-import path from "path";
-import fs from "fs/promises";
 import { ProfileUseCases } from "@application/use_cases/profileUseCases";
 import { UserUseCases } from "@application/use_cases/userUseCases";
-import { profile } from "console";
 import { PictureUseCases } from "@application/use_cases/pictureUseCases";
 import { CustomError } from "@domain/erros/CustomError";
 import { HTTP_STATUS } from "@domain/erros/HTTP_StatusEnum";
@@ -21,13 +14,13 @@ export class ProfileService {
     private readonly userUseCases: UserUseCases,
     private readonly pictureUseCases: PictureUseCases,
     private readonly locationUseCases: LocationUseCases,
-    private readonly tagUseCases: TagUseCases
+    private readonly tagUseCases: TagUseCases,
   ) {}
 
   async createProfile(
     user_id: number,
     data: CreateProfileDTO,
-    files: Express.Multer.File[]
+    files: Express.Multer.File[],
   ): Promise<Profile> {
     // 1. Check that the user exist
     const user = await this.userUseCases.getById(user_id);
@@ -51,12 +44,10 @@ export class ProfileService {
       user.id,
       parseFloat(data.latitude),
       parseFloat(data.longitude),
-      data.city
+      data.city,
     );
 
     // 5. Save tags
-
-    // 5. Process and link tags!
     if (data.interests) {
       const interestsArray = data.interests.split(";");
       await this.tagUseCases.processAndLinkTags(user_id, interestsArray);

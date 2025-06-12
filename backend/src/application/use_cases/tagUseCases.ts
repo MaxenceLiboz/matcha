@@ -5,12 +5,12 @@ export class TagUseCases {
 
   async processAndLinkTags(userId: number, interests: string[]): Promise<void> {
     if (!interests || interests.length === 0) {
-      return; // No interests to process
+      return;
     }
 
     for (const interestName of interests) {
       // Clean up the tag name (remove '#' and trim whitespace)
-      const cleanedName = interestName.replace(/#/g, '').trim();
+      const cleanedName = interestName.replace(/#/g, "").trim();
       if (cleanedName.length === 0) continue;
 
       // Find an existing tag or create a new one

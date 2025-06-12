@@ -1,17 +1,15 @@
 import { config } from "@infrastructure/config";
-import { createApp } from '@infrastructure/web/express';
-
+import { createApp } from "@infrastructure/web/express";
 
 async function startServer() {
+  const app = createApp();
 
-    const app = createApp();
-
-    app.listen(config.PORT, () => {
+  app.listen(config.PORT, () => {
     console.log(`Server is running on http://${config.HOST}:${config.PORT}`);
-    });
+  });
 }
 
-startServer().catch(error => {
-    console.error("Failed to start server:", error);
-    process.exit(1);
+startServer().catch((error) => {
+  console.error("Failed to start server:", error);
+  process.exit(1);
 });

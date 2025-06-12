@@ -15,7 +15,7 @@ export class Picture extends AbstractEntity {
     is_profile?: boolean,
     id?: number,
     created_at?: Date,
-    updated_at?: Date
+    updated_at?: Date,
   ) {
     super(id, created_at, updated_at);
     this.user_id = user_id;
@@ -29,12 +29,12 @@ export class Picture extends AbstractEntity {
     user_id: number,
     ref: string,
     mime_type: string,
-    is_profile?: boolean
+    is_profile?: boolean,
   ): Picture {
     if (!user_id || !ref || !mime_type) {
       throw new CustomError(
         `User ID, ref, and mime_type are required [user_id: ${user_id}, ref: ${ref}, mime_type: ${mime_type}]`,
-        HTTP_STATUS.BAD_REQUEST
+        HTTP_STATUS.BAD_REQUEST,
       );
     }
 
@@ -49,7 +49,7 @@ export class Picture extends AbstractEntity {
     mime_type: string,
     is_profile: boolean,
     created_at: Date,
-    updated_at: Date
+    updated_at: Date,
   ): Picture {
     return new Picture(
       user_id,
@@ -58,7 +58,7 @@ export class Picture extends AbstractEntity {
       is_profile,
       id,
       created_at,
-      updated_at
+      updated_at,
     );
   }
 }

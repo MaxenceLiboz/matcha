@@ -15,7 +15,7 @@ export class Location extends AbstractEntity {
     city: string,
     id?: number,
     created_at?: Date,
-    updated_at?: Date
+    updated_at?: Date,
   ) {
     super(id, created_at, updated_at);
     this.user_id = user_id;
@@ -30,10 +30,15 @@ export class Location extends AbstractEntity {
     longitude: number,
     city: string,
   ): Location {
-    if (!user_id || latitude === undefined || longitude === undefined || !city) {
+    if (
+      !user_id ||
+      latitude === undefined ||
+      longitude === undefined ||
+      !city
+    ) {
       throw new CustomError(
         "User ID, coordinates, and city are required for Location.",
-        HTTP_STATUS.BAD_REQUEST
+        HTTP_STATUS.BAD_REQUEST,
       );
     }
     return new Location(user_id, latitude, longitude, city);
@@ -46,8 +51,16 @@ export class Location extends AbstractEntity {
     longitude: number,
     city: string,
     created_at: Date,
-    updated_at: Date
+    updated_at: Date,
   ): Location {
-    return new Location(user_id, latitude, longitude, city, id, created_at, updated_at);
+    return new Location(
+      user_id,
+      latitude,
+      longitude,
+      city,
+      id,
+      created_at,
+      updated_at,
+    );
   }
 }

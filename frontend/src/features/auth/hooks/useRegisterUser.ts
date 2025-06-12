@@ -8,31 +8,33 @@ import { SubmitHandler } from "react-hook-form";
 export type RegisterFormValues = RegisterUserRequest;
 
 export const useRegisterUser = () => {
-		
+  const navigate = useNavigate();
+  const [serverError, setServerError] = useState<string | null>(null);
 
-	const navigate = useNavigate();
-	const [serverError, setServerError] = useState<string | null>(null);
+  const mutation = useMutation<
+    RegisterUserResponse,
+    Error,
+    RegisterUserRequest
+  >({
+    mutationFn: registerUser,
+    onSuccess: (data: RegisterUserResponse) => {
+      alert("Verify your email in order to validate your account before login");
+      navigate("/login");
+    },
+    onError: (error: any) => {
+      let errorMessage = "An unexpected error occurred during registration.";
+      if (error.response && error.response.data) {
+        const responseData = error.response.data;
+        errorMessage = responseData.error.message;
+      }
+      setServerError(errorMessage);
+    },
+  });
 
-	const mutation = useMutation<RegisterUserResponse, Error, RegisterUserRequest>({
-		mutationFn: registerUser,
-		onSuccess: (data: RegisterUserResponse) => {
-			alert('Verify your email in order to validate your account before login')
-			navigate('/login');
-		},
-		onError: (error: any) => {
-			let errorMessage = 'An unexpected error occurred during registration.';
-			if (error.response && error.response.data) {
-				const responseData = error.response.data;
-				errorMessage = responseData.error.message
-			}
-			setServerError(errorMessage);
-		},
-	});
+  const onSubmit: SubmitHandler<RegisterFormValues> = (data) => {
+    setServerError(null);
+    mutation.mutate(data);
+  };
 
-	const onSubmit: SubmitHandler<RegisterFormValues> = (data) => {
-		setServerError(null);
-		mutation.mutate(data);
-	};
-
-	return {mutation, onSubmit, serverError}
+  return { mutation, onSubmit, serverError };
 };

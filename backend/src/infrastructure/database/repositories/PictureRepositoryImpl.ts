@@ -17,7 +17,7 @@ export class PictureRepository
     super(
       db,
       "Picture",
-      PictureMapper as IMapper<Selectable<PictureTable>, Picture>
+      PictureMapper as IMapper<Selectable<PictureTable>, Picture>,
     );
   }
 
@@ -38,7 +38,7 @@ export class PictureRepository
       if (!updatedPicture) {
         throw new CustomError(
           "Error fetching the updated picture.",
-          HTTP_STATUS.UNPROCESSABLE_ENTITY
+          HTTP_STATUS.UNPROCESSABLE_ENTITY,
         );
       }
       return updatedPicture;
@@ -61,7 +61,7 @@ export class PictureRepository
       if (!newPicture) {
         throw new CustomError(
           "Error fetching the newly created picture.",
-          HTTP_STATUS.UNPROCESSABLE_ENTITY
+          HTTP_STATUS.UNPROCESSABLE_ENTITY,
         );
       }
       return newPicture;

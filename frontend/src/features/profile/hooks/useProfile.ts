@@ -23,7 +23,7 @@ export const useUpdateProfile = (props: {
   const [serverError, setServerError] = useState<string | null>(null);
   const [serverSuccess, setServerSuccess] = useState<string | null>(null);
   const [profilePicPreview, setProfilePicPreview] = useState<string | null>(
-    null
+    null,
   );
   const [otherPicsPreview, setOtherPicsPreview] = useState<string[]>([]);
   const [locationError, setLocationError] = useState<string | null>(null);
@@ -68,7 +68,7 @@ export const useUpdateProfile = (props: {
   }, [watchedOtherPics]);
 
   const handleProfilePictureChange = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     if (event.target.files && event.target.files[0]) {
       setValue("profilePicture", event.target.files[0], {
@@ -80,7 +80,7 @@ export const useUpdateProfile = (props: {
   };
 
   const handleOtherPicturesChange = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     if (event.target.files && event.target.files.length > 0) {
       const newlySelectedFiles = Array.from(event.target.files);
@@ -97,7 +97,7 @@ export const useUpdateProfile = (props: {
         alert(
           `You can upload a maximum of ${limit} other pictures. ${
             combinedFiles.length - limit
-          } files were not added.`
+          } files were not added.`,
         );
         combinedFiles = combinedFiles.slice(0, limit);
       }
@@ -109,7 +109,7 @@ export const useUpdateProfile = (props: {
       setValue(
         "otherPictures",
         dataTransfer.files.length > 0 ? dataTransfer.files : null,
-        { shouldValidate: true }
+        { shouldValidate: true },
       );
     }
     event.target.value = "";
@@ -132,7 +132,7 @@ export const useUpdateProfile = (props: {
     setValue(
       "otherPictures",
       dataTransfer.files.length > 0 ? dataTransfer.files : null,
-      { shouldValidate: true }
+      { shouldValidate: true },
     );
   };
 
@@ -145,7 +145,7 @@ export const useUpdateProfile = (props: {
       if (city) {
         setCityName(city);
       } else {
-        setLocationError('Couldn\'t load the location');
+        setLocationError("Couldn't load the location");
       }
     }
   };
@@ -238,6 +238,6 @@ export const useUpdateProfile = (props: {
     handleLocationChange,
     locationError,
     cityName,
-    authorizeLocation
+    authorizeLocation,
   };
 };

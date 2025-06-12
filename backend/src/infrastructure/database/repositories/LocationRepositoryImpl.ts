@@ -16,40 +16,46 @@ export class LocationRepository
     super(
       db,
       "Location",
-      LocationMapper as IMapper<Selectable<LocationTable>, Location>
+      LocationMapper as IMapper<Selectable<LocationTable>, Location>,
     );
   }
 
   async save(location: Location): Promise<Location> {
-      // Check if a location for this user already exists
-      const existing = await this.getByFields({ user_id: location.user_id });
-      
-      if (existing.length > 0 && existing[0].id) {
-          // Update existing location
-          const updateData: Updateable<LocationTable> = LocationMapper.toPersistenceUpdate(location);
-          await this.db
-              .updateTable("Location")
-              .set(updateData)
-              .where("user_id", "=", location.user_id)
-              .executeTakeFirstOrThrow();
-          const updatedLocation = await this.getByFields({ user_id: location.user_id });
-          return updatedLocation[0];
+    // Check if a location for this user already exists
+    const existing = await this.getByFields({ user_id: location.user_id });
 
-      } else {
-          // Insert new location
-          const insertData: Insertable<LocationTable> = LocationMapper.toPersistenceInsert(location);
-          const { insertId } = await this.db
-              .insertInto("Location")
-              .values(insertData)
-              .executeTakeFirstOrThrow();
-          if (!insertId) {
-              throw new UnprocessableEntity("Failed to save the location.");
-          }
-          const newLocation = await this.getById(Number(insertId));
-          if (!newLocation) {
-              throw new CustomError("Error fetching newly created location.", HTTP_STATUS.UNPROCESSABLE_ENTITY);
-          }
-          return newLocation;
+    if (existing.length > 0 && existing[0].id) {
+      // Update existing location
+      const updateData: Updateable<LocationTable> =
+        LocationMapper.toPersistenceUpdate(location);
+      await this.db
+        .updateTable("Location")
+        .set(updateData)
+        .where("user_id", "=", location.user_id)
+        .executeTakeFirstOrThrow();
+      const updatedLocation = await this.getByFields({
+        user_id: location.user_id,
+      });
+      return updatedLocation[0];
+    } else {
+      // Insert new location
+      const insertData: Insertable<LocationTable> =
+        LocationMapper.toPersistenceInsert(location);
+      const { insertId } = await this.db
+        .insertInto("Location")
+        .values(insertData)
+        .executeTakeFirstOrThrow();
+      if (!insertId) {
+        throw new UnprocessableEntity("Failed to save the location.");
       }
+      const newLocation = await this.getById(Number(insertId));
+      if (!newLocation) {
+        throw new CustomError(
+          "Error fetching newly created location.",
+          HTTP_STATUS.UNPROCESSABLE_ENTITY,
+        );
+      }
+      return newLocation;
+    }
   }
 }

@@ -7,8 +7,10 @@ import fs from "fs/promises";
 export class PictureUseCases {
   constructor(private readonly pictureRepository: IPictureRepository) {}
 
-  async save(files: Express.Multer.File[], user_id: number): Promise<Picture[]> {
-
+  async save(
+    files: Express.Multer.File[],
+    user_id: number,
+  ): Promise<Picture[]> {
     let pictures = [];
 
     const allFiles = Object.values(files).flat();
@@ -22,7 +24,7 @@ export class PictureUseCases {
         "..",
         "..",
         "uploads",
-        uniqueFilename
+        uniqueFilename,
       );
 
       // Ensure the uploads directory exists
@@ -34,7 +36,7 @@ export class PictureUseCases {
         user_id,
         uniqueFilename,
         file.mimetype,
-        file.fieldname === 'profile_picture'
+        file.fieldname === "profile_picture",
       );
       pictures.push(await this.pictureRepository.save(pictureToCreate));
     }

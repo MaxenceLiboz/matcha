@@ -30,34 +30,34 @@ const authService = new AuthService(
   authUseCases,
   userUseCases,
   verificationUseCases,
-  sendEmailUseCase
+  sendEmailUseCase,
 );
 const authController = new AuthController(authService);
 
 authRoutes.post(
   "/login",
   validationMiddleware(LoginUserSchema),
-  (req, res, next) => authController.loginUser(req, res, next)
+  (req, res, next) => authController.loginUser(req, res, next),
 );
 
 authRoutes.post(
   "/register",
   validationMiddleware(CreateUserSchema),
-  (req, res, next) => authController.registerUser(req, res, next)
+  (req, res, next) => authController.registerUser(req, res, next),
 );
 
 authRoutes.post(
   "/send-verification",
   validationMiddleware(SendUserVerificationOrForgotPasswordSchema),
-  (req, res, next) => authController.sendUserVerification(req, res, next)
+  (req, res, next) => authController.sendUserVerification(req, res, next),
 );
 
 authRoutes.post(
   "/verify-user",
   validationMiddleware(UserVerificationOrForgotPasswordSchema),
-  (req, res, next) => authController.verifyUser(req, res, next)
+  (req, res, next) => authController.verifyUser(req, res, next),
 );
 
 authRoutes.get("/refresh-token", (req, res, next) =>
-  authController.refreshUserToken(req, res, next)
+  authController.refreshUserToken(req, res, next),
 );

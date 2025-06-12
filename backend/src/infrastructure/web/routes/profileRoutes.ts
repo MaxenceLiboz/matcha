@@ -2,13 +2,10 @@ import { Router } from "express";
 import { db } from "@infrastructure/database/database";
 import validationMiddleware from "../middleware/validator/validatorMiddleware";
 import { CreateProfileSchema } from "@application/dtos/profile.dto";
-
-// Import your new classes
 import { ProfileRepository } from "@infrastructure/database/repositories/ProfileRepositoryImpl";
 import { PictureRepository } from "@infrastructure/database/repositories/PictureRepositoryImpl";
 import { ProfileService } from "@application/services/profileService";
 import { ProfileController } from "../controllers/profileController";
-import authMiddleware from "../middleware/authMiddleware";
 import { fileValidationMiddleware } from "../middleware/validator/fileValidationMiddleware";
 import multer from "multer";
 import { ProfileUseCases } from "@application/use_cases/profileUseCases";
@@ -27,7 +24,6 @@ const upload = multer({ storage: multer.memoryStorage() }).fields([
   { name: "other_pictures", maxCount: 4 },
 ]);
 
-// 2. Instantiate dependencies
 const profileRepository = new ProfileRepository(db);
 const pictureRepository = new PictureRepository(db);
 const userRepository = new UserRepository(db);
@@ -45,12 +41,12 @@ const profileService = new ProfileService(
   userUseCases,
   pictureUseCases,
   locationUseCases,
-  tagUseCases
+  tagUseCases,
 );
 const profileController = new ProfileController(profileService);
 
 profileRoutes.post("/ping", (req, res, next) =>
-  profileController.ping(req, res, next)
+  profileController.ping(req, res, next),
 );
 
 profileRoutes.post(
@@ -63,5 +59,5 @@ profileRoutes.post(
     requiredFields: ["profile_picture"],
     minTotalFileCount: 1,
   }),
-  (req, res, next) => profileController.createProfile(req, res, next)
+  (req, res, next) => profileController.createProfile(req, res, next),
 );

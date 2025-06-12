@@ -28,7 +28,7 @@ apiClient.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 // If token is not valid and we have a refresh token, try to refresh it
@@ -46,28 +46,25 @@ apiClient.interceptors.response.use(
       originalRequest._retry = true;
       let refresh_token = localStorage.getItem("refreshToken");
       if (refresh_token && refresh_token !== "") {
-        apiClient.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${refresh_token}`;
+        apiClient.defaults.headers.common["Authorization"] =
+          `Bearer ${refresh_token}`;
         await axios
           .create({
             baseURL: `http://${HOST}:${PORT}/api/v1`,
-			headers: {
-				"Authorization": `Bearer ${refresh_token}`
-			}
+            headers: {
+              Authorization: `Bearer ${refresh_token}`,
+            },
           })
           .get("/auth/refresh-token")
           .then((response) => {
-			const user = jwtDecode<User>(response.data.access_token);
-			localStorage.setItem("authToken", response.data.access_token);
-			localStorage.setItem("refreshToken", response.data.refresh_token);
-			localStorage.setItem("user", JSON.stringify(user));
-            originalRequest.headers[
-              "Authorization"
-            ] = `Bearer ${response.data.access_token}`;
-            apiClient.defaults.headers.common[
-              "Authorization"
-            ] = `Bearer ${response.data.access_token}`;
+            const user = jwtDecode<User>(response.data.access_token);
+            localStorage.setItem("authToken", response.data.access_token);
+            localStorage.setItem("refreshToken", response.data.refresh_token);
+            localStorage.setItem("user", JSON.stringify(user));
+            originalRequest.headers["Authorization"] =
+              `Bearer ${response.data.access_token}`;
+            apiClient.defaults.headers.common["Authorization"] =
+              `Bearer ${response.data.access_token}`;
           })
           .catch((err) => {
             if (err.response.status === 401) {
@@ -81,7 +78,7 @@ apiClient.interceptors.response.use(
       }
     }
     return Promise.reject(error);
-  }
+  },
 );
 
 export default apiClient;

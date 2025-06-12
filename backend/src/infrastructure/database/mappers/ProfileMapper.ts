@@ -13,7 +13,7 @@ export class ProfileMapper {
       db_record.sexual_preference as SexualPreference,
       db_record.fame_rating,
       db_record.created_at,
-      db_record.updated_at
+      db_record.updated_at,
     );
   }
 

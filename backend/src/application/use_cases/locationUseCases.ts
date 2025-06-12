@@ -8,14 +8,9 @@ export class LocationUseCases {
     user_id: number,
     latitude: number,
     longitude: number,
-    city: string
+    city: string,
   ): Promise<Location> {
-    const locationToSave = Location.create(
-      user_id,
-      latitude,
-      longitude,
-      city,
-    );
+    const locationToSave = Location.create(user_id, latitude, longitude, city);
     return await this.locationRepository.save(locationToSave);
   }
 }

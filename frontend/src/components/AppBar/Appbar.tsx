@@ -1,4 +1,4 @@
-import React, { JSX, useState } from 'react';
+import React, { JSX, useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -16,11 +16,11 @@ import {
   useTheme,
   useMediaQuery,
   Theme,
-} from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import LogoutIcon from '@mui/icons-material/Logout';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
 
 interface MenuItem {
   text: string;
@@ -28,20 +28,20 @@ interface MenuItem {
 }
 
 const menuItems: MenuItem[] = [
-  { text: 'Home', actionKey: 'home' },
-  { text: 'Profile', actionKey: 'profile' },
-  { text: 'Suggestions', actionKey: 'suggestions' },
-  { text: 'Research', actionKey: 'research' },
-  { text: 'Settings', actionKey: 'settings' },
+  { text: "Home", actionKey: "home" },
+  { text: "Profile", actionKey: "profile" },
+  { text: "Suggestions", actionKey: "suggestions" },
+  { text: "Research", actionKey: "research" },
+  { text: "Settings", actionKey: "settings" },
 ];
 
 const AppHeader: React.FC = () => {
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
   const theme: Theme = useTheme();
-  const isMobile: boolean = useMediaQuery(theme.breakpoints.down('md'));
+  const isMobile: boolean = useMediaQuery(theme.breakpoints.down("md"));
 
-  const {logout} = useAuth();
+  const { logout } = useAuth();
 
   const handleDrawerToggle = (): void => {
     setMobileOpen(!mobileOpen);
@@ -55,7 +55,11 @@ const AppHeader: React.FC = () => {
   };
 
   const drawer = (
-    <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center', width: 250 }} role="presentation">
+    <Box
+      onClick={handleDrawerToggle}
+      sx={{ textAlign: "center", width: 250 }}
+      role="presentation"
+    >
       <Typography variant="h6" sx={{ my: 2 }}>
         Matcha
       </Typography>
@@ -91,18 +95,18 @@ const AppHeader: React.FC = () => {
               href="/"
               sx={{
                 mr: 2,
-                display: { xs: 'none', md: 'flex' },
-                fontFamily: 'monospace',
+                display: { xs: "none", md: "flex" },
+                fontFamily: "monospace",
                 fontWeight: 700,
-                letterSpacing: '.1rem',
-                color: 'inherit',
-                textDecoration: 'none',
+                letterSpacing: ".1rem",
+                color: "inherit",
+                textDecoration: "none",
               }}
             >
               Matcha
             </Typography>
 
-            <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+            <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
               <IconButton
                 color="inherit"
                 aria-label="open drawer"
@@ -118,31 +122,38 @@ const AppHeader: React.FC = () => {
                 component="a"
                 href="/"
                 sx={{
-                  display: { xs: 'flex', md: 'none' },
+                  display: { xs: "flex", md: "none" },
                   flexGrow: 1,
-                  fontFamily: 'monospace',
+                  fontFamily: "monospace",
                   fontWeight: 700,
-                  color: 'inherit',
-                  textDecoration: 'none',
+                  color: "inherit",
+                  textDecoration: "none",
                 }}
               >
                 APP
               </Typography>
             </Box>
 
-            <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, justifyContent: 'center', alignItems: 'center' }}>
+            <Box
+              sx={{
+                flexGrow: 1,
+                display: { xs: "none", md: "flex" },
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
               {menuItems.map((item) => (
                 <Button
                   key={item.text}
                   onClick={() => handleMenuClick(item.actionKey)}
-                  sx={{ my: 2, color: 'white', display: 'block', mx: 1 }}
+                  sx={{ my: 2, color: "white", display: "block", mx: 1 }}
                 >
                   {item.text}
                 </Button>
               ))}
             </Box>
 
-            <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+            <Box sx={{ display: { xs: "none", md: "flex" } }}>
               <Button
                 color="inherit"
                 onClick={logout}
@@ -164,8 +175,8 @@ const AppHeader: React.FC = () => {
           keepMounted: true,
         }}
         sx={{
-          display: { xs: 'block', md: 'none' },
-          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 250 },
+          display: { xs: "block", md: "none" },
+          "& .MuiDrawer-paper": { boxSizing: "border-box", width: 250 },
         }}
       >
         {drawer}

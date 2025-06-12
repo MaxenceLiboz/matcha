@@ -95,7 +95,6 @@ export const ProfileForm: React.FC = () => {
     authorizeLocation,
   } = useUpdateProfile({ watch, setValue, getValues });
 
-
   return (
     <Box
       component="form"
@@ -262,7 +261,7 @@ export const ProfileForm: React.FC = () => {
             multiple
             freeSolo // Allow custom tags
             options={PREDEFINED_INTERESTS.filter(
-              (opt) => !(currentValues || []).includes(opt)
+              (opt) => !(currentValues || []).includes(opt),
             )}
             value={currentValues || []}
             onChange={(event, newValue) => {
