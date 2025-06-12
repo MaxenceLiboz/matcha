@@ -1,14 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import {
-  TextField,
-  Button,
-  Box,
-  Typography,
-  Alert,
-  CircularProgress,
-  Link as MuiLink,
-} from "@mui/material";
+import { TextField, Button, Box, Typography, Alert, CircularProgress, Link as MuiLink } from "@mui/material";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { LoginFormValues, useVerifyUser } from "../hooks/useVerifyUser";
 import { useLoginUser } from "../hooks/useLoginUser";
@@ -79,12 +71,7 @@ export const LoginForm: React.FC = () => {
           {serverError.toLowerCase().includes("email is not verified") && (
             <>
               {" "}
-              <MuiLink
-                component={RouterLink}
-                variant="body2"
-                to="/send-email-verification"
-                sx={{ ml: 1 }}
-              >
+              <MuiLink component={RouterLink} variant="body2" to="/send-email-verification" sx={{ ml: 1 }}>
                 Resend verification email?
               </MuiLink>
             </>
@@ -100,19 +87,21 @@ export const LoginForm: React.FC = () => {
         disabled={mutation.isPending}
         sx={{ mt: 2, py: 1.5 }}
       >
-        {mutation.isPending ? (
-          <CircularProgress size={24} color="inherit" />
-        ) : (
-          "Login"
-        )}
+        {mutation.isPending ? <CircularProgress size={24} color="inherit" /> : "Login"}
       </Button>
 
-      <Typography variant="body2" textAlign="center" sx={{ mt: 2 }}>
-        Need to resend validation email?{" "}
-        <MuiLink component={RouterLink} to="/send-email-verification">
-          Click here
-        </MuiLink>
-      </Typography>
+      <Box sx={{ display: "flex", justifyContent: "space-between", mt: 1 }}>
+        <Typography variant="body2">
+          <MuiLink component={RouterLink} to="/forgot-password">
+            Forgot Password
+          </MuiLink>
+        </Typography>
+        <Typography variant="body2">
+          <MuiLink component={RouterLink} to="/send-email-verification">
+            Resend verification
+          </MuiLink>
+        </Typography>
+      </Box>
       <Typography variant="body2" textAlign="center" sx={{ mt: 1 }}>
         Don't have an account?{" "}
         <MuiLink component={RouterLink} to="/register">

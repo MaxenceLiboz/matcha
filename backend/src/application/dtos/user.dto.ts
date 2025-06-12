@@ -1,7 +1,4 @@
-import {
-  SchemaDefinition,
-  VALIDATOR,
-} from "@infrastructure/web/middleware/validator/validatorTypes";
+import { SchemaDefinition, VALIDATOR } from "@infrastructure/web/middleware/validator/validatorTypes";
 
 export interface CreateUserDTO {
   email: string;
@@ -69,13 +66,24 @@ export interface LoginUserDTO {
 }
 export const LoginUserSchema: SchemaDefinition = {
   email: [{ type: VALIDATOR.REQUIRED }, { type: VALIDATOR.EMAIL }],
-  password: [
-    { type: VALIDATOR.REQUIRED },
-    { type: VALIDATOR.MAX_LENGTH, arg: 60 },
-  ],
+  password: [{ type: VALIDATOR.REQUIRED }, { type: VALIDATOR.MAX_LENGTH, arg: 60 }],
 };
 
 export interface JWTTokenResponseDTO {
   access_token: string;
   refresh_token: string;
 }
+
+export interface ResetPasswordDTO {
+  token: string;
+  password: string;
+}
+
+export const ResetPasswordSchema: SchemaDefinition = {
+  token: [
+    { type: VALIDATOR.REQUIRED },
+    { type: VALIDATOR.MIN_LENGTH, arg: 36 },
+    { type: VALIDATOR.MAX_LENGTH, arg: 36 },
+  ],
+  password: [{ type: VALIDATOR.REQUIRED }, { type: VALIDATOR.PASSWORD }],
+};
