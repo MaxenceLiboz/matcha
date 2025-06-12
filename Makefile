@@ -28,3 +28,6 @@ restart-frontend:
 
 restart-database:
 	docker compose restart database
+
+restart-script:
+	docker compose restart script_bootstrap_db
