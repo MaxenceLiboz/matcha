@@ -22,6 +22,7 @@
         gender ENUM('Male', 'Female', 'Other') NOT NULL,
         sexual_preference ENUM('Heterosexual', 'Homosexual', 'Other') NOT NULL,
         fame_rating INT NOT NULL DEFAULT 0,
+        biography VARCHAR(500) NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL
     );

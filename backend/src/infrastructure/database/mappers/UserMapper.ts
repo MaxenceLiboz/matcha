@@ -30,13 +30,13 @@ export class UserMapper {
   }
 
   static toPersistenceUpdate(domainUser: User, password_hash?: string): Updateable<UserTable> {
-    if (password_hash || domainUser.password_hash) {
+    if (password_hash) {
       return {
         email: domainUser.email,
         first_name: domainUser.first_name,
         last_name: domainUser.last_name,
         username: domainUser.username,
-        password_hash: password_hash || domainUser.password_hash,
+        password_hash: password_hash,
       };
     } else {
       return {
