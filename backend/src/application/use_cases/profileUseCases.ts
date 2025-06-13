@@ -12,6 +12,7 @@ export class ProfileUseCases {
       profile.gender,
       profile.sexual_preference,
       0,
+      profile.biography
     );
     return await this.profileRepository.save(profileToCreate);
   }

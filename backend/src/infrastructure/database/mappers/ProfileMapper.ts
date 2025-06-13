@@ -12,6 +12,7 @@ export class ProfileMapper {
       db_record.gender as Gender,
       db_record.sexual_preference as SexualPreference,
       db_record.fame_rating,
+      db_record.biography,
       db_record.created_at,
       db_record.updated_at,
     );
@@ -24,6 +25,7 @@ export class ProfileMapper {
       gender: domainProfile.gender,
       sexual_preference: domainProfile.sexual_preference,
       fame_rating: domainProfile.fame_rating,
+      biography: domainProfile.biography,
     };
   }
 
@@ -33,6 +35,7 @@ export class ProfileMapper {
       gender: domainProfile.gender,
       sexual_preference: domainProfile.sexual_preference,
       fame_rating: domainProfile.fame_rating,
+      biography: domainProfile.biography,
     };
   }
 }

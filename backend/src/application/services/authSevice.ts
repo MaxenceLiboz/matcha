@@ -31,7 +31,7 @@ export class AuthService {
     });
 
     if (users.length === 0 || users.length > 1) {
-      throw new CustomError("Cannot find user", HTTP_STATUS.NOT_FOUND);
+      throw new CustomError("Email or password incorrect", HTTP_STATUS.NOT_FOUND);
     }
 
     const user = users[0];
@@ -55,7 +55,6 @@ export class AuthService {
   }
 
   async sendUserVerification(data: SendUserVerificationOrForgotPasswordDTO): Promise<void> {
-    // Don´t throw error to prevent user iteration
     const user = await this.userUseCases.getUserByUsernameAndEmail(data).catch(() => null);
     if (user && user.verified == false) {
       await this.sendVerificationEmail(user);

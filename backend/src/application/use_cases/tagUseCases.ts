@@ -1,4 +1,5 @@
 import { TagResponseDTO } from "@application/dtos/tag.dto";
+import { Tag } from "@domain/entities/Tag";
 import { ITagRepository } from "@domain/repositories/ITagrepository";
 
 export class TagUseCases {
@@ -30,5 +31,9 @@ export class TagUseCases {
     return tags.map((tag) => ({
       name: tag.name,
     }));
+  }
+
+  async getByUserId(user_id: number): Promise<Tag[]> {
+    return await this.tagRepository.getByUserId(user_id);
   }
 }

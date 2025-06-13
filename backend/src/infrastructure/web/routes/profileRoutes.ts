@@ -41,13 +41,11 @@ const profileService = new ProfileService(
   userUseCases,
   pictureUseCases,
   locationUseCases,
-  tagUseCases,
+  tagUseCases
 );
 const profileController = new ProfileController(profileService);
 
-profileRoutes.post("/ping", (req, res, next) =>
-  profileController.ping(req, res, next),
-);
+profileRoutes.post("/ping", (req, res, next) => profileController.ping(req, res, next));
 
 profileRoutes.post(
   "/",
@@ -59,5 +57,7 @@ profileRoutes.post(
     requiredFields: ["profile_picture"],
     minTotalFileCount: 1,
   }),
-  (req, res, next) => profileController.createProfile(req, res, next),
+  (req, res, next) => profileController.createProfile(req, res, next)
 );
+
+profileRoutes.get("/", (req, res, next) => profileController.getOwnProfile(req, res, next));

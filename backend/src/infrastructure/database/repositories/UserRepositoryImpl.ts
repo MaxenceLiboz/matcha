@@ -48,7 +48,7 @@ export class UserRepository extends AbstractRepositoryImpl<User, "User"> impleme
   async save(user: User, password_hash?: string): Promise<User> {
     if (user.id) {
       // Update if user already exist
-      const updateData: Updateable<UserTable> = UserMapper.toPersistenceUpdate(user);
+      const updateData: Updateable<UserTable> = UserMapper.toPersistenceUpdate(user, password_hash);
       await this.db.updateTable("User").set(updateData).where("id", "=", user.id).executeTakeFirstOrThrow();
 
       const updated_user = await this.getById(user.id);

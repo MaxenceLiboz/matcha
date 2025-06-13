@@ -59,4 +59,13 @@ export class TagRepository
         .execute();
     }
   }
+
+  async getByUserId(user_id: number): Promise<Tag[]> {
+    return await this.db
+      .selectFrom("User_Tag")
+      .innerJoin("Tag", "User_Tag.tag_id", "Tag.id")
+      .selectAll()
+      .where("User_Tag.user_id", "=", user_id)
+      .execute();
+  }
 }

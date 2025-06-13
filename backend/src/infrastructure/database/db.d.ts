@@ -75,6 +75,7 @@ export interface Picture {
 
 export interface Profile {
   age: number;
+  biography: string;
   created_at: Generated<Date>;
   fame_rating: Generated<number>;
   gender: "Female" | "Male" | "Other";
