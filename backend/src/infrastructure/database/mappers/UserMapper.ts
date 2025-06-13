@@ -14,14 +14,11 @@ export class UserMapper {
       db_record.verified === 1,
       db_record.created_at,
       db_record.updated_at,
-      db_record.password_hash,
+      db_record.password_hash
     );
   }
 
-  static toPersistenceInsert(
-    domainUser: User,
-    password_hash: string,
-  ): Insertable<UserTable> {
+  static toPersistenceInsert(domainUser: User, password_hash: string): Insertable<UserTable> {
     return {
       email: domainUser.email,
       first_name: domainUser.first_name,
@@ -32,17 +29,14 @@ export class UserMapper {
     };
   }
 
-  static toPersistenceUpdate(
-    domainUser: User,
-    password_hash?: string,
-  ): Updateable<UserTable> {
-    if (password_hash) {
+  static toPersistenceUpdate(domainUser: User, password_hash?: string): Updateable<UserTable> {
+    if (password_hash || domainUser.password_hash) {
       return {
         email: domainUser.email,
         first_name: domainUser.first_name,
         last_name: domainUser.last_name,
         username: domainUser.username,
-        password_hash: password_hash,
+        password_hash: password_hash || domainUser.password_hash,
       };
     } else {
       return {

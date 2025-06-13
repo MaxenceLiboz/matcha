@@ -1,7 +1,6 @@
 import React from "react";
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import {
-  TextField,
   Button,
   Box,
   Typography,
@@ -10,20 +9,35 @@ import {
   Link as MuiLink,
 } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
-import {
-  UserVerificationFormValues,
-  useUserVerification,
-} from "../hooks/useUserVerification";
 import TextFieldForm from "../../../components/TextFieldForm";
+import { VerificationOrForgotPasswordRequest } from "../types";
 
-export const UserVerificationForm: React.FC = () => {
+interface CredentialRequestFormProps {
+  title: string;
+  buttonText: string;
+  onSubmit: SubmitHandler<VerificationOrForgotPasswordRequest>;
+  isPending: boolean;
+  serverError: string | null;
+  serverSuccess: string | null;
+  loginPath: string;
+  loginText: string;
+}
+
+export const CredentialRequestForm: React.FC<CredentialRequestFormProps> = ({
+  title,
+  buttonText,
+  onSubmit,
+  isPending,
+  serverError,
+  serverSuccess,
+  loginPath,
+  loginText,
+}) => {
   const {
     register,
     handleSubmit,
     formState: { errors: formHookErrors },
-  } = useForm<UserVerificationFormValues>({});
-
-  const { mutation, onSubmit, serverError } = useUserVerification();
+  } = useForm<VerificationOrForgotPasswordRequest>({});
 
   return (
     <Box
@@ -42,8 +56,10 @@ export const UserVerificationForm: React.FC = () => {
       noValidate
     >
       <Typography variant="h5" component="h1" textAlign="center" gutterBottom>
-        Send email to verify account
+        {title}
       </Typography>
+
+      {serverSuccess && <Alert severity="success">{serverSuccess}</Alert>}
 
       <TextFieldForm
         name="Email"
@@ -51,7 +67,7 @@ export const UserVerificationForm: React.FC = () => {
         register={register}
         error={formHookErrors.email}
         serverError={serverError}
-        isPending={mutation.isPending}
+        isPending={isPending}
       />
 
       <TextFieldForm
@@ -60,7 +76,7 @@ export const UserVerificationForm: React.FC = () => {
         register={register}
         error={formHookErrors.username}
         serverError={serverError}
-        isPending={mutation.isPending}
+        isPending={isPending}
       />
 
       {serverError && (
@@ -74,19 +90,19 @@ export const UserVerificationForm: React.FC = () => {
         variant="contained"
         color="primary"
         fullWidth
-        disabled={mutation.isPending}
+        disabled={isPending}
         sx={{ mt: 2, py: 1.5 }}
       >
-        {mutation.isPending ? (
+        {isPending ? (
           <CircularProgress size={24} color="inherit" />
         ) : (
-          "Resend email verification"
+          buttonText
         )}
       </Button>
 
       <Typography variant="body2" textAlign="center" sx={{ mt: 1 }}>
-        Want to login?{" "}
-        <MuiLink component={RouterLink} to="/login">
+        {loginText}{" "}
+        <MuiLink component={RouterLink} to={loginPath}>
           Login
         </MuiLink>
       </Typography>

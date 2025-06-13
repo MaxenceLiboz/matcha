@@ -1,3 +1,4 @@
+/// <reference path="../../infrastructure/config/environment.d.ts"/>
 import { User } from "@domain/entities/User";
 import { IUserRepository } from "@domain/repositories/IUserRepository";
 import { config } from "@infrastructure/config";
@@ -13,18 +14,9 @@ export class AuthUseCases {
   constructor(private readonly userRepository: IUserRepository) {}
 
   async registerUser(data: CreateUserDTO): Promise<UserResponseDTO> {
-    const userToSave = User.create(
-      data.email,
-      data.first_name,
-      data.last_name,
-      data.username,
-    );
+    const userToSave = User.create(data.email, data.first_name, data.last_name, data.username);
     // Check either the username or email that needs to be unique already exist
-    const existingUser: User | null =
-      await this.userRepository.getUserByUsernameOrEmail(
-        data.username,
-        data.email,
-      );
+    const existingUser: User | null = await this.userRepository.getUserByUsernameOrEmail(data.username, data.email);
     if (existingUser && existingUser.email === data.email) {
       throw new EmailInUseError(data.email);
     } else if (existingUser && existingUser.username === data.username) {
@@ -36,10 +28,7 @@ export class AuthUseCases {
 
     // The save method now returns the user with DB-generated id, created_at, updated_at
     try {
-      const savedUser = await this.userRepository.save(
-        userToSave,
-        hash_password,
-      );
+      const savedUser = await this.userRepository.save(userToSave, hash_password);
 
       if (!savedUser.id) {
         throw new UnprocessableEntity("Creation of the user failed.");
@@ -100,9 +89,7 @@ export class AuthUseCases {
     return refreshToken;
   }
 
-  async refreshToken(
-    token: string,
-  ): Promise<{ access_token: string; refresh_token: string }> {
+  async refreshToken(token: string): Promise<{ access_token: string; refresh_token: string }> {
     if (!token) {
       throw new CustomError("No token provided", HTTP_STATUS.UNAUTHORIZED);
     }
@@ -125,5 +112,17 @@ export class AuthUseCases {
     } catch (err) {
       throw new CustomError("Invalid token", HTTP_STATUS.UNAUTHORIZED);
     }
+  }
+
+  async updateUserPassword(userId: number, newPassword: string): Promise<void> {
+    const user = await this.userRepository.getById(userId);
+    if (!user) {
+      throw new CustomError("User associated with token not found.", HTTP_STATUS.NOT_FOUND);
+    }
+
+    const newHashedPassword = await bcrypt.hash(newPassword, 10);
+
+    user.password_hash = newHashedPassword;
+    await this.userRepository.save(user);
   }
 }

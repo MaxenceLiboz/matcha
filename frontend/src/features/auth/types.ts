@@ -28,3 +28,9 @@ export interface VerificationOrForgotPasswordRequest {
 export interface UserVerificationOrForgotPasswordRequest {
   token: string;
 }
+
+export interface ResetPasswordRequest {
+  token: string;
+  password: string;
+  confirmPassword: string;
+}

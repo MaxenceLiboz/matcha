@@ -24,6 +24,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { ProfileFormValues } from "../types";
 import { useUpdateProfile } from "../hooks/useProfile";
 import TextFieldForm from "../../../components/TextFieldForm";
+import { useTags } from "../hooks/useTag";
 
 const GENDERS = [
   { value: "Male", label: "Male" },
@@ -95,6 +96,8 @@ export const ProfileForm: React.FC = () => {
     authorizeLocation,
   } = useUpdateProfile({ watch, setValue, getValues });
 
+  const { tags, fetchTags, isTagsLoading, haveTagsBeenFetched } = useTags();
+
   return (
     <Box
       component="form"
@@ -148,27 +151,19 @@ export const ProfileForm: React.FC = () => {
                 </Select>
               )}
             />
-            {errors.gender && (
-              <FormHelperText>{errors.gender.message}</FormHelperText>
-            )}
+            {errors.gender && <FormHelperText>{errors.gender.message}</FormHelperText>}
           </FormControl>
         </Grid>
 
         <Grid width={0.33}>
           <FormControl fullWidth error={!!errors.sexualPreference}>
-            <InputLabel id="sexual-preference-label">
-              Sexual Preference
-            </InputLabel>
+            <InputLabel id="sexual-preference-label">Sexual Preference</InputLabel>
             <Controller
               name="sexualPreference"
               control={control}
               rules={{ required: "Sexual preference is required" }}
               render={({ field }) => (
-                <Select
-                  labelId="sexual-preference-label"
-                  label="Sexual Preference"
-                  {...field}
-                >
+                <Select labelId="sexual-preference-label" label="Sexual Preference" {...field}>
                   <MenuItem value="" disabled>
                     <em>Select Preference</em>
                   </MenuItem>
@@ -180,9 +175,7 @@ export const ProfileForm: React.FC = () => {
                 </Select>
               )}
             />
-            {errors.sexualPreference && (
-              <FormHelperText>{errors.sexualPreference.message}</FormHelperText>
-            )}
+            {errors.sexualPreference && <FormHelperText>{errors.sexualPreference.message}</FormHelperText>}
           </FormControl>
         </Grid>
         <Grid width={0.33}>
@@ -252,28 +245,24 @@ export const ProfileForm: React.FC = () => {
         name="interests"
         control={control}
         rules={{
-          validate: (value) =>
-            (value && value.length > 0 && value.length <= 10) ||
-            "Please select between 1 and 10 interests.",
+          validate: (value) => {
+            console.log(value);
+            return (value && value.length > 0 && value.length <= 10) || "Please select between 1 and 10 interests."
+          }
         }}
         render={({ field: { onChange, value: currentValues } }) => (
           <Autocomplete
             multiple
-            freeSolo // Allow custom tags
-            options={PREDEFINED_INTERESTS.filter(
-              (opt) => !(currentValues || []).includes(opt),
-            )}
-            value={currentValues || []}
-            onChange={(event, newValue) => {
-              // Ensure tags are stored with '#' and handle freeSolo input
-              const formattedValues = newValue.map((item) => {
-                const tag =
-                  typeof item === "string"
-                    ? item
-                    : (item as any).inputValue || item;
-                return tag.startsWith("#") ? tag : `#${tag}`;
-              });
-              onChange(formattedValues);
+            freeSolo
+            loading={isTagsLoading}
+            options={tags}
+            onOpen={() => {
+              if (!haveTagsBeenFetched) {
+                fetchTags();
+              }
+            }}
+            onChange={(_, newValue) => {
+              onChange(newValue);
             }}
             renderInput={(params) => (
               <TextField
@@ -282,10 +271,7 @@ export const ProfileForm: React.FC = () => {
                 label="Interests (e.g., #vegan, #books)"
                 placeholder="Add up to 10 interests"
                 error={!!errors.interests}
-                helperText={
-                  errors.interests?.message ||
-                  "Type and press Enter to add a new interest."
-                }
+                helperText={errors.interests?.message || "Type and press Enter to add a new interest."}
                 disabled={mutation.isPending}
               />
             )}
@@ -297,19 +283,9 @@ export const ProfileForm: React.FC = () => {
         <Typography variant="subtitle1" gutterBottom>
           Profile Picture (Required)
         </Typography>
-        <Button
-          variant="outlined"
-          component="label"
-          startIcon={<PhotoCameraIcon />}
-          disabled={mutation.isPending}
-        >
+        <Button variant="outlined" component="label" startIcon={<PhotoCameraIcon />} disabled={mutation.isPending}>
           Upload Profile Picture
-          <input
-            type="file"
-            hidden
-            accept="image/jpeg,image/png,image/webp"
-            onChange={handleProfilePictureChange}
-          />
+          <input type="file" hidden accept="image/jpeg,image/png,image/webp" onChange={handleProfilePictureChange} />
         </Button>
         {profilePicPreview && (
           <Box sx={{ mt: 2, display: "flex", alignItems: "center", gap: 1 }}>
@@ -323,11 +299,7 @@ export const ProfileForm: React.FC = () => {
                 borderRadius: "4px",
               }}
             />
-            <IconButton
-              onClick={removeProfilePicture}
-              size="small"
-              disabled={mutation.isPending}
-            >
+            <IconButton onClick={removeProfilePicture} size="small" disabled={mutation.isPending}>
               <DeleteIcon />
             </IconButton>
           </Box>
@@ -399,10 +371,7 @@ export const ProfileForm: React.FC = () => {
           name="otherPictures"
           control={control}
           rules={{
-            validate: (value) =>
-              !value ||
-              value.length <= 4 ||
-              "You can upload a maximum of 4 other pictures.",
+            validate: (value) => !value || value.length <= 4 || "You can upload a maximum of 4 other pictures.",
           }}
           render={() => <></>}
         />
@@ -421,11 +390,7 @@ export const ProfileForm: React.FC = () => {
         disabled={mutation.isPending}
         sx={{ mt: 2, py: 1.5, fontSize: "1.1rem" }}
       >
-        {mutation.isPending ? (
-          <CircularProgress size={24} color="inherit" />
-        ) : (
-          "Save Profile"
-        )}
+        {mutation.isPending ? <CircularProgress size={24} color="inherit" /> : "Save Profile"}
       </Button>
     </Box>
   );

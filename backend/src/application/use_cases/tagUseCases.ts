@@ -1,3 +1,4 @@
+import { TagResponseDTO } from "@application/dtos/tag.dto";
 import { ITagRepository } from "@domain/repositories/ITagrepository";
 
 export class TagUseCases {
@@ -21,5 +22,13 @@ export class TagUseCases {
         await this.tagRepository.linkUserToTag(userId, tag.id);
       }
     }
+  }
+
+  async getAllTags(): Promise<TagResponseDTO[]> {
+    const tags = await this.tagRepository.getByFields({});
+
+    return tags.map((tag) => ({
+      name: tag.name,
+    }));
   }
 }

@@ -23,21 +23,14 @@ export interface RuleWithArg<TArg> extends BaseRule {
 }
 
 // We can add different type of arguments
-export type ValidationRule =
-  | BaseRule
-  | RuleWithArg<number>
-  | RuleWithArg<string[]>;
+export type ValidationRule = BaseRule | RuleWithArg<number> | RuleWithArg<string[]>;
 
 export type SchemaDefinition = {
   [fieldName: string]: ValidationRule[];
 };
 
 // Type for the validator functions in the dictionary
-type ValidatorFunction = (
-  value: any,
-  fieldName: string,
-  arg?: any,
-) => string | true;
+type ValidatorFunction = (value: any, fieldName: string, arg?: any) => string | true;
 
 // Type for the dictionary itself, ensuring all VALIDATOR enum keys are present
 type ValidatorDictionaryType = {
@@ -47,11 +40,7 @@ type ValidatorDictionaryType = {
 // Dictionnary that holds all the validation functions.
 export const validatorDictionary: ValidatorDictionaryType = {
   [VALIDATOR.REQUIRED]: (value: any, fieldName: string) => {
-    if (
-      value === undefined ||
-      value === null ||
-      (typeof value === "string" && value.trim() === "")
-    ) {
+    if (value === undefined || value === null || (typeof value === "string" && value.trim() === "")) {
       return `${fieldName} is required.`;
     }
     return true;
@@ -88,33 +77,30 @@ export const validatorDictionary: ValidatorDictionaryType = {
   },
 
   [VALIDATOR.NUMBER]: (value: any, fieldName: string) => {
-    if (
-      value !== undefined &&
-      value !== null &&
-      (typeof value !== "number" || isNaN(value))
-    ) {
+    if (value !== undefined && value !== null && (typeof value !== "number" || isNaN(value))) {
       return `${fieldName} must be a number.`;
     }
     return true;
   },
 
-  [VALIDATOR.MIN]: (value: number, fieldName: string, min: number) => {
-    if (typeof value === "number" && value < min) {
+  [VALIDATOR.MIN]: (value: string, fieldName: string, min: number) => {
+    const intValue = parseInt(value);
+    if (isNaN(intValue) || (!isNaN(intValue) && intValue < min)) {
       return `${fieldName} must be at least ${min}.`;
     }
     return true;
   },
 
-  [VALIDATOR.MAX]: (value: number, fieldName: string, max: number) => {
-    if (typeof value === "number" && value > max) {
+  [VALIDATOR.MAX]: (value: string, fieldName: string, max: number) => {
+    const intValue = parseInt(value);
+    if (isNaN(intValue) || (!isNaN(intValue) && intValue > max)) {
       return `${fieldName} must be less than ${max}.`;
     }
     return true;
   },
 
   [VALIDATOR.PASSWORD]: (value: string, fieldName: string) => {
-    const passwordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_#-])[A-Za-z\d@$!%*?&_#-]{8,50}$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_#-])[A-Za-z\d@$!%*?&_#-]{8,50}$/;
 
     if (typeof value !== "string" || !passwordRegex.test(value)) {
       return `${fieldName} policy not matched, at least 8 chars and at most 50 with 1 upper, 1 lower, 1 special and 1 digit.`;

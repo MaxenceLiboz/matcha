@@ -1,13 +1,7 @@
 // src/features/profile/types.ts (or a shared types file)
 export interface ProfileFormValues {
   gender: "male" | "female" | "non-binary" | "other" | "prefer-not-to-say" | "";
-  sexualPreference:
-    | "men"
-    | "women"
-    | "both"
-    | "other"
-    | "prefer-not-to-say"
-    | "";
+  sexualPreference: "men" | "women" | "both" | "other" | "prefer-not-to-say" | "";
   biography: string;
   interests: string[];
   age: number;
@@ -19,8 +13,7 @@ export interface ProfileFormValues {
   city?: string;
 }
 
-export interface UpdateProfileRequest
-  extends Omit<ProfileFormValues, "profilePicture" | "otherPictures"> {
+export interface UpdateProfileRequest extends Omit<ProfileFormValues, "profilePicture" | "otherPictures"> {
   // Backend will likely expect FormData, or URLs if images are pre-uploaded
   // For this example, we'll assume FormData is built in the mutation
 }
@@ -42,4 +35,8 @@ export interface UpdateProfileResponse {
       otherPictureUrls: string[];
     };
   };
+}
+
+export interface Tag {
+  name: string;
 }
