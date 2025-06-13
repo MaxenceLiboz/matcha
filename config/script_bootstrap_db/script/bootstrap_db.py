@@ -62,8 +62,9 @@ def generate_requests_data(user_list, is_french=False, latitude='', longitude=''
         sexual_preference = random.choice(sexual_preferences)
         fame_rating = random.randint(1, 10)
         current_timestamp = time.strftime(f, now)
+        biography = fake.text()
 
-        val_profile.append((user_id, age, gender, sexual_preference, fame_rating, current_timestamp, current_timestamp))
+        val_profile.append((user_id, age, gender, sexual_preference, fame_rating, biography, current_timestamp, current_timestamp))
 
         # PICTURE TABLE
         picture_path = user.get_picture()
@@ -155,7 +156,7 @@ try:
     # FILLING TABLES
 
     sql_user = "INSERT INTO User (email, username, last_name, first_name, password_hash, verified) VALUES  (%s, %s, %s, %s, %s, %s)"
-    sql_profile = "INSERT INTO Profile (user_id, age, gender, sexual_preference, fame_rating, created_at, updated_at) VALUES  (%s, %s, %s, %s, %s, %s, %s)"
+    sql_profile = "INSERT INTO Profile (user_id, age, gender, sexual_preference, fame_rating, biography, created_at, updated_at) VALUES  (%s, %s, %s, %s, %s, %s, %s, %s)"
     sql_picture = "INSERT INTO Picture (user_id, ref, mime_type, is_profile, created_at, updated_at) VALUES (%s, %s, %s, %s, %s, %s)"
     sql_location = "INSERT INTO Location (user_id, latitude, longitude, city, created_at, updated_at) VALUES (%s, %s, %s, %s, %s, %s)"
     sql_tag = "INSERT INTO Tag (name, created_at, updated_at) VALUES (%s, %s, %s)"

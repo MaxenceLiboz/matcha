@@ -1,12 +1,6 @@
 import { useEffect, useState } from "react";
-import { useMutation, useMutationState } from "@tanstack/react-query";
-import {
-  SubmitHandler,
-  useForm,
-  UseFormGetValues,
-  UseFormSetValue,
-  UseFormWatch,
-} from "react-hook-form";
+import { useMutation, useMutationState, useQuery } from "@tanstack/react-query";
+import { SubmitHandler, useForm, UseFormGetValues, UseFormSetValue, UseFormWatch } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { ProfileFormValues, UpdateProfileResponse } from "../types";
 import { createProfile, getLocalisation } from "../profileAPI";
@@ -22,9 +16,7 @@ export const useUpdateProfile = (props: {
 
   const [serverError, setServerError] = useState<string | null>(null);
   const [serverSuccess, setServerSuccess] = useState<string | null>(null);
-  const [profilePicPreview, setProfilePicPreview] = useState<string | null>(
-    null,
-  );
+  const [profilePicPreview, setProfilePicPreview] = useState<string | null>(null);
   const [otherPicsPreview, setOtherPicsPreview] = useState<string[]>([]);
   const [locationError, setLocationError] = useState<string | null>(null);
   const [cityName, setCityName] = useState<string | null>(null);
@@ -32,10 +24,6 @@ export const useUpdateProfile = (props: {
 
   const watchedProfilePic = watch("profilePicture");
   const watchedOtherPics = watch("otherPictures");
-
-  useEffect(() => {
-    geolocalisationMutation.mutate();
-  }, []);
 
   useEffect(() => {
     if (watchedProfilePic) {
@@ -67,9 +55,7 @@ export const useUpdateProfile = (props: {
     }
   }, [watchedOtherPics]);
 
-  const handleProfilePictureChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleProfilePictureChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       setValue("profilePicture", event.target.files[0], {
         shouldValidate: true,
@@ -79,9 +65,7 @@ export const useUpdateProfile = (props: {
     }
   };
 
-  const handleOtherPicturesChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleOtherPicturesChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
       const newlySelectedFiles = Array.from(event.target.files);
       const existingFiles = getValues("otherPictures"); // Get current FileList from RHF
@@ -95,9 +79,7 @@ export const useUpdateProfile = (props: {
       if (combinedFiles.length > limit) {
         // You might want to notify the user that not all files were added
         alert(
-          `You can upload a maximum of ${limit} other pictures. ${
-            combinedFiles.length - limit
-          } files were not added.`,
+          `You can upload a maximum of ${limit} other pictures. ${combinedFiles.length - limit} files were not added.`
         );
         combinedFiles = combinedFiles.slice(0, limit);
       }
@@ -106,11 +88,7 @@ export const useUpdateProfile = (props: {
       const dataTransfer = new DataTransfer();
       combinedFiles.forEach((file) => dataTransfer.items.add(file));
 
-      setValue(
-        "otherPictures",
-        dataTransfer.files.length > 0 ? dataTransfer.files : null,
-        { shouldValidate: true },
-      );
+      setValue("otherPictures", dataTransfer.files.length > 0 ? dataTransfer.files : null, { shouldValidate: true });
     }
     event.target.value = "";
   };
@@ -129,11 +107,7 @@ export const useUpdateProfile = (props: {
     const dataTransfer = new DataTransfer();
     existingFilesArray.forEach((file) => dataTransfer.items.add(file));
 
-    setValue(
-      "otherPictures",
-      dataTransfer.files.length > 0 ? dataTransfer.files : null,
-      { shouldValidate: true },
-    );
+    setValue("otherPictures", dataTransfer.files.length > 0 ? dataTransfer.files : null, { shouldValidate: true });
   };
 
   const handleLocationChange = (isAuthorized: boolean) => {
@@ -157,8 +131,7 @@ export const useUpdateProfile = (props: {
       console.log("Profile updated:", data);
     },
     onError: (error: any) => {
-      let errorMessage =
-        "An unexpected error occurred while updating your profile.";
+      let errorMessage = "An unexpected error occurred while updating your profile.";
       if (error.response && error.response.data && error.response.data.error) {
         errorMessage = error.response.data.error.message;
       } else if (error.message) {
@@ -169,26 +142,36 @@ export const useUpdateProfile = (props: {
     },
   });
 
-  const geolocalisationMutation = useMutation({
-    mutationFn: getLocalisation,
-    onSuccess: (data) => {
-      setCityName(data.location.city);
-      setValue("city", data.location.city);
-      setValue("latitude", data.location.latitude);
-      setValue("longitude", data.location.longitude);
-    },
-    onError: (error: any) => {
-      let errorMessage =
-        "An unexpected error occurred while updating your profile.";
-      if (error.response && error.response.data && error.response.data.error) {
-        errorMessage = error.response.data.error.message;
-      } else if (error.message) {
-        errorMessage = error.message;
-      }
-      setServerError(errorMessage);
-      setServerSuccess(null);
-    },
+  const {
+    data: geolocationData,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["userGeolocation"],
+    queryFn: getLocalisation,
+    enabled: !getValues("city"), // Only run if city isn't already set
+    staleTime: Infinity,
+    retry: 1,
   });
+
+  useEffect(() => {
+    if (geolocationData) {
+      setCityName(geolocationData.city);
+      setValue("city", geolocationData.city, { shouldValidate: true });
+      setValue("latitude", geolocationData.latitude, { shouldValidate: true });
+      setValue("longitude", geolocationData.longitude, { shouldValidate: true });
+    }
+  }, [geolocationData, setValue]);
+
+  useEffect(() => {
+    if (isError) {
+      let errorMessage = "Could not fetch location automatically.";
+      if ((error as any)?.message) {
+        errorMessage = (error as any).message;
+      }
+      setLocationError(errorMessage);
+    }
+  }, [isError, error]);
 
   const onSubmit: SubmitHandler<ProfileFormValues> = (data) => {
     setServerError(null);

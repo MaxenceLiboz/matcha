@@ -40,3 +40,29 @@ export interface UpdateProfileResponse {
 export interface Tag {
   name: string;
 }
+
+export type Gender = "Male" | "Female" | "Other";
+export type SexualPreference = "Heterosexual" | "Homosexual" | "Other";
+
+export interface LocationResponseDTO {
+  city: string;
+  latitude: string;
+  longitude: string;
+}
+
+export interface FullProfileDTO {
+  id: number;
+  username: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  age: number;
+  gender: Gender;
+  sexualPreference: SexualPreference;
+  fameRating: number;
+  biography: string;
+  location: LocationResponseDTO | null;
+  profile_picture_ref: string;
+  other_picture_ref: string[];
+  tags: Pick<Tag, "name">[];
+}

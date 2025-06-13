@@ -8,6 +8,7 @@ import HomePage from "../pages/HomePage";
 import ResendVerificationPage from "../pages/ResendVerificationPage";
 import ForgotPasswordPage from "../pages/ForgotPasswordPage";
 import ResetPasswordPage from "../pages/ResetPasswordPage";
+import ProfilePage from "../pages/ProfileDisplayPage";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
       <Route path="/reset-password" element={<PublicRoute element={<ResetPasswordPage />} />} />
 
       <Route path="/" element={<ProtectedRoute element={<HomePage />} />} />
+      <Route path="/profile" element={<ProtectedRoute element={<ProfilePage />} />} />
 
       <Route path="*" element={<Navigate to="/login" />} />
     </Routes>

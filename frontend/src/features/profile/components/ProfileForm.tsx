@@ -96,7 +96,7 @@ export const ProfileForm: React.FC = () => {
     authorizeLocation,
   } = useUpdateProfile({ watch, setValue, getValues });
 
-  const { tags, fetchTags, isTagsLoading, haveTagsBeenFetched } = useTags();
+  const { tags, isLoading: isTagsLoading, isError } = useTags();
 
   return (
     <Box
@@ -256,11 +256,6 @@ export const ProfileForm: React.FC = () => {
             freeSolo
             loading={isTagsLoading}
             options={tags}
-            onOpen={() => {
-              if (!haveTagsBeenFetched) {
-                fetchTags();
-              }
-            }}
             onChange={(_, newValue) => {
               onChange(newValue);
             }}

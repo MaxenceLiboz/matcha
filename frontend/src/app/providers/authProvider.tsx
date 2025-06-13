@@ -21,14 +21,20 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
   useEffect(() => {
     try {
+      console.log("Loading user from local storage", isLoading);
       const storedUser = localStorage.getItem("user");
+      const access_token = localStorage.getItem("authToken");
       if (storedUser) {
         setUser(JSON.parse(storedUser));
+        setIsAuthenticated(true && !!access_token);
+        setIsLoading(false);
+      } else {
+        setIsAuthenticated(false);
+        setIsLoading(false);
       }
     } catch (error) {
       localStorage.removeItem("user");
     }
-    setIsLoading(false);
   }, []);
 
   const login = useCallback(
@@ -38,6 +44,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       localStorage.setItem("user", JSON.stringify(userData));
       localStorage.setItem("authToken", access_token);
       localStorage.setItem("refreshToken", refresh_token);
+      window.location.reload();
     },
     [],
   );
@@ -46,12 +53,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     setUser(null);
     localStorage.removeItem("user");
     localStorage.removeItem("authToken");
+    localStorage.removeItem("refreshToken");
+    window.location.reload();
   }, []);
-
-  useEffect(() => {
-    const access_token = localStorage.getItem("authToken");
-    setIsAuthenticated(!!user && !!access_token);
-  }, [user]);
 
   return (
     <AuthContext.Provider
