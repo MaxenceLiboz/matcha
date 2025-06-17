@@ -43,6 +43,8 @@ services:
     ports:
       - "8001:8000"
       - "9229:9229" # Debug
+    env_file:
+      - ./config/backend/.env
     volumes:
       - ./backend:/backend
       - script_profile_pictures:/shared_pictures
@@ -50,9 +52,6 @@ services:
     networks:
       - db_network
     depends_on:
-      db:
-        condition: service_healthy
-        restart: true
       script_bootstrap_db:
         condition: service_completed_successfully
 
@@ -69,7 +68,7 @@ services:
       - ./frontend:/frontend
     command: /entrypoint.sh
     depends_on:
-      backend:
+      script_bootstrap_db:
         condition: service_completed_successfully
 
 

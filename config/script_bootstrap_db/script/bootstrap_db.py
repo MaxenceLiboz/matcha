@@ -17,7 +17,7 @@ val_picture = []
 email_list = []
 username_list = []
 user_id = 1
-DEST_PICTURES = "./shared_pictures"
+DEST_PICTURES = "/shared_pictures"
 
 def generate_requests_data(user_list, is_french=False, latitude='', longitude='', city=''):
 
@@ -71,7 +71,7 @@ def generate_requests_data(user_list, is_french=False, latitude='', longitude=''
 
         # PICTURE TABLE
         picture_path = user.get_picture()
-        picture_dest_name = DEST_PICTURES + str(user_id) + '.jpg'
+        picture_dest_name = DEST_PICTURES + '/profile_' + str(user_id) + '.jpg'
         urllib.request.urlretrieve(picture_path, picture_dest_name)
 
         val_picture.append((user_id, picture_dest_name, 'jpg', 1, current_timestamp, current_timestamp))
