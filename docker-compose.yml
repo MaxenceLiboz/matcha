@@ -57,6 +57,8 @@ services:
       dockerfile: ./config/frontend/Dockerfile
     ports:
       - "8000:3000"
+    env_file:
+      - ./config/frontend/.env
     volumes:
       - ./frontend:/frontend
     command: /entrypoint.sh

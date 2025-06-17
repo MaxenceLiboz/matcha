@@ -26,7 +26,6 @@ export class AuthUseCases {
     // Needs to add hashing the password with bycript
     const hash_password = await bcrypt.hash(data.password, 10);
 
-    // The save method now returns the user with DB-generated id, created_at, updated_at
     try {
       const savedUser = await this.userRepository.save(userToSave, hash_password);
 
@@ -121,8 +120,7 @@ export class AuthUseCases {
     }
 
     const newHashedPassword = await bcrypt.hash(newPassword, 10);
-
-    user.password_hash = newHashedPassword;
-    await this.userRepository.save(user);
+    
+    await this.userRepository.save(user, newHashedPassword);
   }
 }

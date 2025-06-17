@@ -12,11 +12,7 @@ export class ProfileController {
     res.status(HTTP_STATUS.OK).json();
   }
 
-  async createProfile(
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> {
+  async createProfile(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const userId = req.user?.id;
 
@@ -27,22 +23,27 @@ export class ProfileController {
       const profileData: CreateProfileDTO = req.body;
       const files = req.files as Express.Multer.File[];
 
-      const newProfile = await this.profileService.createProfile(
-        userId,
-        profileData,
-        files,
-      );
+      const newProfile = await this.profileService.createProfile(userId, profileData, files);
 
       res.status(HTTP_STATUS.CREATED).json(newProfile);
     } catch (error) {
       if (error instanceof CustomError) {
         throw error;
       }
-      throw new CustomError(
-        "Unprocessable entity",
-        HTTP_STATUS.UNPROCESSABLE_ENTITY,
-        error,
-      );
+      throw new CustomError("Unprocessable entity", HTTP_STATUS.UNPROCESSABLE_ENTITY, error);
+    }
+  }
+
+  async getOwnProfile(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const userId = req.user?.id;
+      if (!userId) {
+        throw new CustomError("Unauthorized", HTTP_STATUS.UNAUTHORIZED);
+      }
+      const profile = await this.profileService.getProfileByUserId(userId);
+      res.status(HTTP_STATUS.OK).json(profile);
+    } catch (error) {
+      next(error);
     }
   }
 }
