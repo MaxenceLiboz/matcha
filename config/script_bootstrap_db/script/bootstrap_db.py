@@ -5,6 +5,8 @@ from randomuser import RandomUser
 import random
 import os
 import time
+import urllib.request
+
 
 val_user = []
 val_profile = []
@@ -15,6 +17,7 @@ val_picture = []
 email_list = []
 username_list = []
 user_id = 1
+DEST_PICTURES = "./shared_pictures"
 
 def generate_requests_data(user_list, is_french=False, latitude='', longitude='', city=''):
 
@@ -68,8 +71,10 @@ def generate_requests_data(user_list, is_french=False, latitude='', longitude=''
 
         # PICTURE TABLE
         picture_path = user.get_picture()
+        picture_dest_name = DEST_PICTURES + str(user_id) + '.jpg'
+        urllib.request.urlretrieve(picture_path, picture_dest_name)
 
-        val_picture.append((user_id, picture_path, 'jpg', 1, current_timestamp, current_timestamp))
+        val_picture.append((user_id, picture_dest_name, 'jpg', 1, current_timestamp, current_timestamp))
 
         # LOCATION TABLE
         if is_french == False:

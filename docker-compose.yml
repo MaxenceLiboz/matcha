@@ -25,12 +25,15 @@ services:
       dockerfile: ./config/script_bootstrap_db/Dockerfile
     env_file:
       - ./config/script_bootstrap_db/.env
+    volumes:
+      - script_profile_pictures:/shared_pictures
     command: /entrypoint.sh
     networks:
       - db_network
     depends_on:
       db:
         condition: service_healthy
+      
 
   backend:
     image: backend
@@ -42,6 +45,7 @@ services:
       - "9229:9229" # Debug
     volumes:
       - ./backend:/backend
+      - script_profile_pictures:/shared_pictures
     command: /entrypoint.sh
     networks:
       - db_network
@@ -49,6 +53,8 @@ services:
       db:
         condition: service_healthy
         restart: true
+      script_bootstrap_db:
+        condition: service_completed_successfully
 
   frontend:
     image: frontend
@@ -63,9 +69,8 @@ services:
       - ./frontend:/frontend
     command: /entrypoint.sh
     depends_on:
-      db:
-        condition: service_healthy
-        restart: true
+      backend:
+        condition: service_completed_successfully
 
 
 networks:
@@ -75,3 +80,4 @@ networks:
 volumes:
     db_data:
       name: mysql-volume
+    script_profile_pictures: {} 
