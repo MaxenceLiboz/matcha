@@ -65,7 +65,7 @@ services:
     env_file:
       - ./config/frontend/.env
     volumes:
-      - ./frontend:/frontend  
+      - ./frontend:/frontend
     command: /entrypoint.sh
     depends_on:
       script_bootstrap_db:
@@ -79,4 +79,4 @@ networks:
 volumes:
     db_data:
       name: mysql-volume
-    script_profile_pictures: {} 
+    script_profile_pictures:
