@@ -26,7 +26,7 @@ services:
     env_file:
       - ./config/script_bootstrap_db/.env
     volumes:
-      - script_profile_pictures:/shared_pictures
+      - script_profile_pictures:/backend/src/uploads
     command: /entrypoint.sh
     networks:
       - db_network
@@ -47,7 +47,7 @@ services:
       - ./config/backend/.env
     volumes:
       - ./backend:/backend
-      - script_profile_pictures:/shared_pictures
+      - script_profile_pictures:/backend/src/uploads
     command: /entrypoint.sh
     networks:
       - db_network
@@ -65,7 +65,7 @@ services:
     env_file:
       - ./config/frontend/.env
     volumes:
-      - ./frontend:/frontend
+      - ./frontend:/frontend  
     command: /entrypoint.sh
     depends_on:
       script_bootstrap_db:
